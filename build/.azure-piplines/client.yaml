@@ -13,7 +13,7 @@ steps:
 
 - task: Npm@1
   inputs:
-    customCommand: 'npm install && npm run build'
+    customCommand: 'npm install'
     workingDir: '$(Build.SourcesDirectory)/src/reactaspserver.client'
   displayName: 'npm install'
 
