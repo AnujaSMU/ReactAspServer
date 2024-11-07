@@ -11,20 +11,20 @@ steps:
     versionSpec: 'v22.8.0'
   displayName: 'Install Node JS'
 
-- script: |
-    cd src/reactaspserver.client/
-    npm install
-    npm run build
-  displayName: 'npm install and build'
-
-# - task: Npm@1
-#   inputs:
-#     customCommand: 'npm install && npm run build'
-#     workingDir: '$(Build.SourcesDirectory)/src/reactaspserver.client'
+# - script: |
+#     cd src/reactaspserver.client/
+#     npm install
+#     npm run build
 #   displayName: 'npm install and build'
+
+- task: Npm@1
+  inputs:
+    customCommand: 'npm install && npm run build'
+    workingDir: '$(Build.SourcesDirectory)/src/reactaspserver.client'
+  displayName: 'npm install and build'
 
 - task: PublishBuildArtifacts@1
   inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)/src/reactaspserver.client'
+    PathtoPublish: '$(Build.SourcesDirectory)/src/reactaspserver.client'
     ArtifactName: 'drop'
     publishLocation: 'Container'
