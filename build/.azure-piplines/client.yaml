@@ -14,7 +14,7 @@ steps:
 - task: Npm@1
   inputs:
     customCommand: 'npm install && npm run build'
-    workingDir: '$(Build.ArtifactStagingDirectory)/src/reactaspserver.client/package.json'
+    workingDir: '$(Build.ArtifactStagingDirectory)/src/reactaspserver.client'
   displayName: 'npm install and build'
 
 - task: PublishBuildArtifacts@1
