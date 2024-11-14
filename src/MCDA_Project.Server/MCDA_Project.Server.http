@@ -1,0 +1,6 @@
+@MCDA_Project.Server_HostAddress = http://localhost:5007
+
+GET {{MCDA_Project.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

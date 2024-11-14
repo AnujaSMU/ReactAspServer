@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35312.102
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCDA_Project.Server", "MCDA_Project.Server\MCDA_Project.Server.csproj", "{D5396399-0AF1-419C-93EB-D6EB14B73280}"
+EndProject
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "mcda_project.client", "mcda_project.client\mcda_project.client.esproj", "{5FD67950-317C-4CAC-85B0-419700F37FBA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D5396399-0AF1-419C-93EB-D6EB14B73280}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5396399-0AF1-419C-93EB-D6EB14B73280}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5396399-0AF1-419C-93EB-D6EB14B73280}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5396399-0AF1-419C-93EB-D6EB14B73280}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5FD67950-317C-4CAC-85B0-419700F37FBA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5FD67950-317C-4CAC-85B0-419700F37FBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5FD67950-317C-4CAC-85B0-419700F37FBA}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{5FD67950-317C-4CAC-85B0-419700F37FBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5FD67950-317C-4CAC-85B0-419700F37FBA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5FD67950-317C-4CAC-85B0-419700F37FBA}.Release|Any CPU.Deploy.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9F2DF0A7-F8B2-44DA-A88F-F0BD8E1E07D0}
+	EndGlobalSection
+EndGlobal

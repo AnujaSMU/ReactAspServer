@@ -1,4 +1,4 @@
-namespace ReactAspServer.Server
+namespace MCDA_Project.Server
 {
     public class WeatherForecast
     {
