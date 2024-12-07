@@ -23,7 +23,7 @@ namespace MCDA_Project.Server.Controllers
             var recipe = _context.Recipes
                 .Include(r => r.Images) // Include related images
                 .Include(r => r.RecipeIngredients)
-                    .ThenInclude(ri => ri.Ingredient) // Include related ingredients
+                .ThenInclude(ri => ri.Ingredient) // Include related ingredients
                 .Where(r => r.RecipeID == id)
                 .Select(r => new
                 {
@@ -41,7 +41,8 @@ namespace MCDA_Project.Server.Controllers
                     {
                         ri.Ingredient.IngredientID,
                         ri.Ingredient.Name,
-                        ri.Quantity
+                        ri.Quantity,
+                        ri.Ingredient.CostPerUnit // Add cost information from the Ingredients table
                     }),
                     Images = r.Images.Select(img => img.ImageURL)
                 })
@@ -54,5 +55,32 @@ namespace MCDA_Project.Server.Controllers
 
             return Ok(recipe);
         }
+
+
+        [HttpGet("trending-recipes")]
+        public IActionResult GetTopRecipes()
+        {
+            // Query the database to get the top 6 recipes with the most views
+            var topRecipes = _context.Recipes
+                .OrderByDescending(r => r.Views) // Order recipes by Views in descending order
+                .Take(6) // Take the top 6 recipes
+                .Select(r => new
+                {
+                    r.RecipeID,
+                    r.Title,
+                    r.Description,
+                    r.Views,
+                    ImageURL = r.Images.FirstOrDefault().ImageURL // Retrieve the first image URL
+                })
+                .ToList();
+
+            if (topRecipes == null || !topRecipes.Any())
+            {
+                return NotFound(new { Message = "No recipes found." });
+            }
+
+            return Ok(topRecipes);
+        }
+
     }
 }
