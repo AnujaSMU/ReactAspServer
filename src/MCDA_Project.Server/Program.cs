@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using MCDA_Project.Data;
+using MCDA_Project.Server.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,16 +13,26 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 
-// Configure MySQL database
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
+
+builder.Services.AddDbContext<RecipeFinderContext>(options =>
     options.UseMySql(
         builder.Configuration.GetConnectionString("DefaultConnection"),
         ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("DefaultConnection"))
-    )
-);
+    ));
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", builder =>
+    {
+        builder.AllowAnyOrigin() // Allow requests from any origin
+              .AllowAnyMethod() // Allow any HTTP method (GET, POST, PUT, DELETE, etc.)
+              .AllowAnyHeader(); // Allow any headers
+    });
+});
 
 var app = builder.Build();
+
+app.UseCors("AllowAll");
 
 app.UseDefaultFiles();
 app.UseStaticFiles();
