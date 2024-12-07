@@ -20,22 +20,18 @@ namespace MCDA_Project.Server.Controllers
         [HttpPost("Register")]
         public async Task<ActionResult<User>> RegisterUser([FromBody] User user)
         {
-            // Validate the request
             if (string.IsNullOrEmpty(user.Username) || string.IsNullOrEmpty(user.Password))
             {
                 return BadRequest("Username and Password are required.");
             }
 
-            // Check if the username already exists
             if (await _context.Users.AnyAsync(u => u.Username == user.Username))
             {
                 return BadRequest("Username already exists.");
             }
 
-            // Hash the password (for security)
             user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
 
-            // Add default values for other fields if not provided
             user.City ??= string.Empty;
             user.ProvinceState ??= string.Empty;
             user.Country ??= string.Empty;
@@ -46,21 +42,43 @@ namespace MCDA_Project.Server.Controllers
             user.CreditCardType ??= string.Empty;
             user.ExpiryDate = user.ExpiryDate == default ? DateTime.Now.AddYears(3) : user.ExpiryDate;
 
-            // Add the user to the database
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetUser), new { id = user.UserID }, user);
+            return CreatedAtAction(nameof(AuthenticateUser), new { username = user.Username }, user);
         }
 
-        // GET: api/Users/{id}
-        [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUser(int id)
+        // POST: api/Users/Authenticate
+        [HttpPost("Authenticate")]
+        public async Task<ActionResult<string>> AuthenticateUser([FromBody] LoginRequest loginRequest)
         {
-            var user = await _context.Users.FindAsync(id);
-            if (user == null) return NotFound();
+            if (string.IsNullOrEmpty(loginRequest.Username) || string.IsNullOrEmpty(loginRequest.Password))
+            {
+                return BadRequest("Username and Password are required.");
+            }
 
-            return user;
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == loginRequest.Username);
+
+            if (user == null)
+            {
+                return Unauthorized("Invalid username.");
+            }
+
+            // Verify the password
+            if (!BCrypt.Net.BCrypt.Verify(loginRequest.Password, user.Password))
+            {
+                return Unauthorized("Invalid password.");
+            }
+
+            // Authentication successful
+            return Ok($"Welcome, {user.Username}!");
         }
+    }
+
+    // DTO for login request
+    public class LoginRequest
+    {
+        public string Username { get; set; }
+        public string Password { get; set; }
     }
 }
