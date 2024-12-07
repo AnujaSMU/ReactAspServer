@@ -48,7 +48,7 @@ namespace MCDA_Project.Server.Data
                 .HasForeignKey(img => img.RecipeID)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // Additional configurations (optional)
+            // Additional configurations
             modelBuilder.Entity<User>()
                 .HasIndex(u => u.Username)
                 .IsUnique();
@@ -58,6 +58,15 @@ namespace MCDA_Project.Server.Data
             modelBuilder.Entity<Ingredient>()
                 .HasIndex(i => i.Name)
                 .IsUnique();
+
+            // Define indexes for RecipeIngredients
+            modelBuilder.Entity<RecipeIngredient>()
+                .HasIndex(ri => ri.IngredientID)
+                .HasDatabaseName("IX_RecipeIngredients_IngredientID");
+
+            modelBuilder.Entity<RecipeIngredient>()
+                .HasIndex(ri => ri.RecipeID)
+                .HasDatabaseName("IX_RecipeIngredients_RecipeID");
 
             base.OnModelCreating(modelBuilder);
         }

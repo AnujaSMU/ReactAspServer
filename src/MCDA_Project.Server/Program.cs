@@ -12,6 +12,8 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+//Caching for easy retrieval of Ingredients
+builder.Services.AddMemoryCache();
 
 
 builder.Services.AddDbContext<RecipeFinderContext>(options =>

@@ -4,6 +4,7 @@ using MCDA_Project.Server.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MCDA_Project.Server.Migrations
 {
     [DbContext(typeof(RecipeFinderContext))]
-    partial class RecipeFinderContextModelSnapshot : ModelSnapshot
+    [Migration("20241207144529_changeunits")]
+    partial class changeunits
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -119,11 +122,9 @@ namespace MCDA_Project.Server.Migrations
 
                     b.HasKey("RecipeIngredientID");
 
-                    b.HasIndex("IngredientID")
-                        .HasDatabaseName("IX_RecipeIngredients_IngredientID");
+                    b.HasIndex("IngredientID");
 
-                    b.HasIndex("RecipeID")
-                        .HasDatabaseName("IX_RecipeIngredients_RecipeID");
+                    b.HasIndex("RecipeID");
 
                     b.ToTable("RecipeIngredients");
                 });
