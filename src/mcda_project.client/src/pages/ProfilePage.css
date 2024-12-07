@@ -1,0 +1,66 @@
+/* Styles for the profile page */
+.profile-page {
+    display: flex;
+}
+
+.profile-content {
+    flex: 1;
+    padding: 20px;
+}
+
+.profile-section {
+    background: #ffffff;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    padding: 20px;
+}
+
+.profile-section h2 {
+    margin-top: 0;
+}
+
+.edit-button {
+    background: #007bff;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    float: right;
+}
+
+.edit-button:hover {
+    background: #0069d9;
+}
+
+.form-group {
+    margin-bottom: 10px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.form-group input:disabled {
+    background: #e9ecef;
+}
+.custom-select {
+    width: 100%;
+    padding: 8px 12px; /* 内边距与输入框一致 */
+    font-size: 16px; /* 字体大小 */
+    border: 1px solid #ced4da; /* 边框 */
+    border-radius: 4px; /* 圆角 */
+    background-color: #fff; /* 背景颜色 */
+    appearance: none; /* 移除默认浏览器样式 */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
