@@ -20,7 +20,7 @@ namespace MCDA_Project.Server.Controllers
         }
 
 
-     
+
 
         // POST: api/RecipeSearch/FindByIngredients
         [HttpPost("FindByIngredients")]
@@ -47,7 +47,15 @@ namespace MCDA_Project.Server.Controllers
                 {
                     recipe.RecipeID,
                     recipe.Title,
-                    recipe.Description
+                    recipe.Description,
+                    Images = recipe.Images.Select(img => img.ImageURL).ToList(),
+                    Ingredients = recipe.RecipeIngredients
+                        .Select(ri => new
+                        {
+                            ri.Ingredient.IngredientID,
+                            ri.Ingredient.Name,
+                            ri.Ingredient.CostPerUnit
+                        }).ToList()
                 })
                 .ToList();
 
@@ -62,6 +70,7 @@ namespace MCDA_Project.Server.Controllers
 
             return Ok(matchingRecipes);
         }
+
     }
 
 }
