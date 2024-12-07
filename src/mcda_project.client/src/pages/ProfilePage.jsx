@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './ProfilePage.css';
 
 const ProfilePage = () => {
-    // Sample user data
-    const initialUserData = {
+    // State to hold user data
+    const [userData, setUserData] = useState({
         UserID: 1,
         Username: 'chefmaster',
         PasswordHash: 'hashed_password_123',
@@ -18,10 +18,8 @@ const ProfilePage = () => {
         CreditCardNumber: '4111111111111111',
         CreditCardType: 'Visa',
         CreditCardExpiry: '2025-12',
-    };
+    });
 
-    // State to hold user data
-    const [userData, setUserData] = useState(initialUserData);
     // State to manage edit modes
     const [isBasicInfoEdit, setIsBasicInfoEdit] = useState(false);
     const [isBankInfoEdit, setIsBankInfoEdit] = useState(false);
@@ -39,15 +37,41 @@ const ProfilePage = () => {
         // For demo, we'll just toggle edit mode
         setIsBankInfoEdit(false);
     };
-    // 格式化 CreditCardExpiry 的函数
-    const formatExpiryDate = (input) => {
-        const match = input.match(/^(\d{4})-(\d{2})$/);
-        if (match) {
-            const [, year, month] = match;
-            return `${month}/${year.slice(2)}`; // 转换成 MM/YY
-        }
-        return input; // 如果不匹配，则返回原始值
-    };
+    
+    // Fetch user data (simulated)
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                // Simulated API call
+                const data = {
+                    results: [
+                        {
+                            UserID: 1,
+                            Username: 'chefmaster',
+                            PasswordHash: 'hashed_password_123',
+                            FirstName: 'John',
+                            LastName: 'Doe',
+                            City: 'Halifax',
+                            ProvinceState: 'Nova Scotia',
+                            Country: 'Canada',
+                            PostalCode: 'B3J1A1',
+                            PhoneNumber: '+19025551234',
+                            EmailAddress: 'john.doe@example.com',
+                            CreditCardNumber: '4111111111111111',
+                            CreditCardType: 'Visa',
+                            CreditCardExpiry: '2025-12',
+                        },
+                    ],
+                };
+                setUserData(data.results[0]);
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+            }
+        };
+
+        fetchUserData();
+    }, []);
+
     return (
         <div className="profile-page">
             <div className="profile-content">
@@ -219,7 +243,7 @@ const ProfilePage = () => {
                                 <option value="American Express">American Express</option>
                                 <option value="Discover">Discover</option>
                                 <option value="Other">Other</option>
-                                </select>
+                            </select>
                         </div>
                         <div className="form-group">
                             <label>CreditCardExpiry Date:</label>
