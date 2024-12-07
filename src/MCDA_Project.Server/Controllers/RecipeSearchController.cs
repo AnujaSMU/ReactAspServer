@@ -1,5 +1,6 @@
 ﻿using MCDA_Project.Server.Data;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace MCDA_Project.Server.Controllers
@@ -17,6 +18,9 @@ namespace MCDA_Project.Server.Controllers
             _cache = cache;
 
         }
+
+
+     
 
         // POST: api/RecipeSearch/FindByIngredients
         [HttpPost("FindByIngredients")]
