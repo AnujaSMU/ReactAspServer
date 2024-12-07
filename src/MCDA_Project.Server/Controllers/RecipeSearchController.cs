@@ -18,8 +18,7 @@ namespace MCDA_Project.Server.Controllers
 
         }
 
-        // POST: api/Recipes/FindByIngredients
-
+        // POST: api/RecipeSearch/FindByIngredients
         [HttpPost("FindByIngredients")]
         public IActionResult FindRecipesByIngredients([FromBody] List<int> ingredientIds)
         {
