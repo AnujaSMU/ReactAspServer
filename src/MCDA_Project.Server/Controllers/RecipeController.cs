@@ -56,12 +56,14 @@ namespace MCDA_Project.Server.Controllers
             return Ok(recipe);
         }
 
-
         [HttpGet("trending-recipes")]
         public IActionResult GetTopRecipes()
         {
             // Query the database to get the top 6 recipes with the most views
             var topRecipes = _context.Recipes
+                .Include(r => r.Images) // Include related images
+                .Include(r => r.RecipeIngredients)
+                .ThenInclude(ri => ri.Ingredient) // Include related ingredients
                 .OrderByDescending(r => r.Views) // Order recipes by Views in descending order
                 .Take(6) // Take the top 6 recipes
                 .Select(r => new
@@ -70,7 +72,14 @@ namespace MCDA_Project.Server.Controllers
                     r.Title,
                     r.Description,
                     r.Views,
-                    ImageURL = r.Images.FirstOrDefault().ImageURL // Retrieve the first image URL
+                    Ingredients = r.RecipeIngredients.Select(ri => new
+                    {
+                        ri.Ingredient.IngredientID,
+                        ri.Ingredient.Name,
+                        ri.Quantity,
+                        ri.Ingredient.CostPerUnit
+                    }),
+                    Images = r.Images.Select(img => img.ImageURL)
                 })
                 .ToList();
 
@@ -81,6 +90,5 @@ namespace MCDA_Project.Server.Controllers
 
             return Ok(topRecipes);
         }
-
     }
 }
