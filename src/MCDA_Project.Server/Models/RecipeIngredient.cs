@@ -1,4 +1,7 @@
-﻿namespace MCDA_Project.Server.Models
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+
+namespace MCDA_Project.Server.Models
 {
     public class RecipeIngredient
     {
@@ -13,5 +16,7 @@
 
         public decimal Quantity { get; set; }
     }
+
+
 
 }

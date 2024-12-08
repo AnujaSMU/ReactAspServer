@@ -24,7 +24,8 @@ namespace MCDA_Project.Server.Controllers
             var ingredients = _context.Ingredients
                 .Select(i => new{
                 i.IngredientID,
-                i.Name
+                i.Name,
+                i.CostPerUnit
             })
                 .ToList();
 
