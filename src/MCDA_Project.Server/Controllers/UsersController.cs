@@ -169,6 +169,7 @@ namespace MCDA_Project.Server.Controllers
                 .Select(u => new
                 {
                     u.UserID,
+                    u.Username,
                     u.FirstName,
                     u.LastName,
                     u.Country,
