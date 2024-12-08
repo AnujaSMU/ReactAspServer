@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using MCDA_Project.Server.Data;
 using System.Linq;
+using MCDA_Project.Server.Models;
 
 namespace MCDA_Project.Server.Controllers
 {
@@ -90,5 +91,110 @@ namespace MCDA_Project.Server.Controllers
 
             return Ok(topRecipes);
         }
+
+        [HttpDelete("delete/{id}")]
+        public async Task<IActionResult> DeleteRecipe(int id)
+        {
+            // Find the recipe with the given ID
+            var recipe = await _context.Recipes
+                .Include(r => r.RecipeIngredients) // Include related RecipeIngredients
+                .Include(r => r.Images) // Include related Images
+                .FirstOrDefaultAsync(r => r.RecipeID == id);
+
+            if (recipe == null)
+            {
+                return NotFound(new { Message = $"Recipe with ID {id} not found." });
+            }
+
+            // Remove related RecipeIngredients
+            _context.RecipeIngredients.RemoveRange(recipe.RecipeIngredients);
+
+            // Remove related Images
+            _context.Images.RemoveRange(recipe.Images);
+
+            // Remove the recipe itself
+            _context.Recipes.Remove(recipe);
+
+            // Save changes to the database
+            await _context.SaveChangesAsync();
+
+            return Ok(new { Message = $"Recipe with ID {id} has been successfully deleted." });
+        }
+
+        [HttpPost("create")]
+        public async Task<IActionResult> CreateRecipe([FromBody] CreateRecipeRequest request)
+        {
+            // Validate the request
+            if (request == null || string.IsNullOrEmpty(request.Title) || request.AuthorID <= 0)
+            {
+                return BadRequest(new { Message = "Invalid recipe data or missing AuthorID." });
+            }
+
+            // Check if the author exists
+            var author = await _context.Users.FirstOrDefaultAsync(u => u.UserID == request.AuthorID);
+            if (author == null)
+            {
+                return NotFound(new { Message = $"Author with ID {request.AuthorID} not found." });
+            }
+
+            // Create a new recipe entity
+            var newRecipe = new Recipe
+            {
+                Title = request.Title,
+                Description = request.Description,
+                Steps = request.Steps,
+                Views = 0, // Initialize views to 0
+                AuthorID = request.AuthorID
+            };
+
+            // Add ingredients to the recipe
+            if (request.Ingredients != null && request.Ingredients.Any())
+            {
+                newRecipe.RecipeIngredients = request.Ingredients.Select(i => new RecipeIngredient
+                {
+                    IngredientID = i.IngredientID,
+                    Quantity = i.Quantity
+                }).ToList();
+            }
+
+            // Add images to the recipe
+            if (request.Images != null && request.Images.Any())
+            {
+                newRecipe.Images = request.Images.Select(url => new Image
+                {
+                    ImageURL = url
+                }).ToList();
+            }
+
+            // Add the new recipe to the context
+            _context.Recipes.Add(newRecipe);
+
+            // Save changes to the database
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction(nameof(GetRecipeDetails), new { id = newRecipe.RecipeID }, new { Message = "Recipe created successfully.", RecipeID = newRecipe.RecipeID });
+        }
+
+
+
+
+
     }
+
+    public class CreateRecipeRequest
+    {
+        public string Title { get; set; }
+        public string Description { get; set; }
+        public string Steps { get; set; }
+        public int AuthorID { get; set; }
+        public List<CreateRecipeIngredientRequest> Ingredients { get; set; }
+        public List<string> Images { get; set; }
+    }
+
+    public class CreateRecipeIngredientRequest
+    {
+        public int IngredientID { get; set; }
+        public decimal Quantity { get; set; }
+    }
+
 }
