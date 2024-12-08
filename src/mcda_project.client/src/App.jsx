@@ -4,6 +4,8 @@ import Sidebar from './components/Sidebar';
 import HomePage from './pages/HomePage';
 import ProfilePage from './pages/ProfilePage';
 import RecipePage from './pages/RecipePage';
+import LoginPage from "@/pages/LoginPage.jsx";
+import Signup from "@/pages/Signup.jsx";
 
 function App(){
     return(
@@ -12,6 +14,8 @@ function App(){
         <Routes>
             <Route path ='/' element={<HomePage/>}/>
             <Route path ='/profile' element={<ProfilePage/>}/>
+            <Route path ='/login' element={<LoginPage/>}/>
+            <Route path ='/signup' element={<Signup/>}/>
             <Route path ='/recipe/:recipeID' element={<RecipePage/>}/>
         </Routes>
 

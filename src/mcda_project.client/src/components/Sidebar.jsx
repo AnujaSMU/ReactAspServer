@@ -18,6 +18,10 @@ const Sidebar = () => {
                     <User size={"24"} />
 						<span className='font-bold hidden md:block'>Profile</span>
 					</Link>
+                <Link to={"/login"} className='flex gap-1'>
+                    <User size={"24"} />
+                    <span className='font-bold hidden md:block'>Login</span>
+                </Link>
 				</ul>
         </div>
     </div>

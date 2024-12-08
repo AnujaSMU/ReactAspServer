@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './ProfilePage.css';
+import Login from './LoginPage.jsx';
+import SignUp from './Signup.jsx';
 
 const ProfilePage = () => {
     // State to hold user data
@@ -24,6 +26,9 @@ const ProfilePage = () => {
     const [isBasicInfoEdit, setIsBasicInfoEdit] = useState(false);
     const [isBankInfoEdit, setIsBankInfoEdit] = useState(false);
     const [errors, setErrors] = useState({});
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [showLogin, setShowLogin] = useState(false);
+    const [showSignUp, setShowSignUp] = useState(false);
 
     // Handle save for Basic Information
     const handleBasicInfoSave = () => {
@@ -176,6 +181,46 @@ const ProfilePage = () => {
         const [month, year] = expiryDate.split('/');
         return `${year}-${month}`;
     };
+
+    // Handle login
+    const handleLogin = (user) => {
+        setUserData(user);
+        setIsLoggedIn(true);
+        setShowLogin(false);
+    };
+
+    // Handle sign up
+    const handleSignUp = (newUser) => {
+        // Simulated sign-up process
+        setUserData(newUser);
+        setIsLoggedIn(true);
+        setShowSignUp(false);
+    };
+
+    // Automatically update username when first name or last name changes
+    useEffect(() => {
+        setUserData({
+            ...userData,
+            Username: `${userData.FirstName.toLowerCase()}_${userData.LastName.toLowerCase()}`,
+        });
+    }, [userData.FirstName, userData.LastName]);
+
+    if (!isLoggedIn) {
+        return (
+            <div>
+                {showLogin ? (
+                    <Login onLogin={handleLogin} />
+                ) : showSignUp ? (
+                    <SignUp onSignUp={handleSignUp} />
+                ) : (
+                    <div>
+                        <p>You didn't login, Please Login</p>
+                        <button onClick={() => setShowLogin(true)}>Login</button>
+                    </div>
+                )}
+            </div>
+        );
+    }
 
     return (
         <div className="profile-page">
