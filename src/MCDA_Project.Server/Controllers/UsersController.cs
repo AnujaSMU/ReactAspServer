@@ -158,6 +158,48 @@ namespace MCDA_Project.Server.Controllers
         "****", "****", "****", creditCardNumber.Substring(creditCardNumber.Length - 4)
             });
         }
+
+        // GET: api/Users/{id}/details
+        [HttpGet("{id}/details")]
+        public async Task<ActionResult> GetUserWithRecipesAndIngredients(int id)
+        {
+            // Fetch user, recipes, and associated ingredients
+            var user = await _context.Users
+                .Where(u => u.UserID == id)
+                .Select(u => new
+                {
+                    u.UserID,
+                    u.FirstName,
+                    u.LastName,
+                    Recipes = _context.Recipes
+                        .Where(r => r.AuthorID == id)
+                        .Select(r => new
+                        {
+                            r.RecipeID,
+                            r.Title,
+                            Ingredients = _context.RecipeIngredients
+                                .Where(ri => ri.RecipeID == r.RecipeID)
+                                .Join(
+                                    _context.Ingredients,
+                                    ri => ri.IngredientID,
+                                    i => i.IngredientID,
+                                    (ri, i) => new { i.IngredientID, i.Name }
+                                )
+                                .ToList()
+                        })
+                        .ToList()
+                })
+                .FirstOrDefaultAsync();
+
+            if (user == null)
+            {
+                return NotFound(new { Message = $"User with ID {id} not found." });
+            }
+
+            return Ok(user);
+        }
+
+
     }
 
     // DTO for login request
