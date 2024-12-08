@@ -171,6 +171,12 @@ namespace MCDA_Project.Server.Controllers
                     u.UserID,
                     u.FirstName,
                     u.LastName,
+                    u.Country,
+                    u.City,
+                    u.ProvinceState,
+                    u.PostalCode,
+                    u.PhoneNumber,
+                    u.EmailAddress,
                     Recipes = _context.Recipes
                         .Where(r => r.AuthorID == id)
                         .Select(r => new
