@@ -72,6 +72,68 @@ const ProfilePage = () => {
         fetchUserData();
     }, []);
 
+    // Format the expiry date from 'YYYY-MM' to 'MM/YYYY'
+    const formatExpiryDate = (expiryDate) => {
+        if (!expiryDate) return '';
+        const [year, month] = expiryDate.split('-');
+        return `${month}/${year}`;
+    };
+
+    // Parse the expiry date from 'MM/YYYY' to 'YYYY-MM'
+    const parseExpiryDate = (expiryDate) => {
+        if (!expiryDate) return '';
+        const [month, year] = expiryDate.split('/');
+        return `${year}-${month}`;
+    };
+
+    // Handle login
+    const handleLogin = (user) => {
+        setUserData(user);
+        setIsLoggedIn(true);
+        setShowLogin(false);
+    };
+
+    // Handle sign up
+    const handleSignUp = (newUser) => {
+        // Simulated sign-up process
+        setUserData(newUser);
+        setIsLoggedIn(true);
+        setShowSignUp(false);
+    };
+
+    // Automatically update username when first name or last name changes
+    useEffect(() => {
+        setUserData({
+            ...userData,
+            Username: `${userData.FirstName.toLowerCase()}_${userData.LastName.toLowerCase()}`,
+        });
+    }, [userData.FirstName, userData.LastName]);
+    const onSignUp = (newUser) => {
+        // Simulated sign-up process
+        setUserData(newUser);
+        setIsLoggedIn(true);
+        setShowSignUp(false);
+    };
+
+    if (!isLoggedIn) {
+        return (
+            <div>
+                {showLogin ? (
+                    <Login onLogin={handleLogin} />
+                ) : showSignUp ? (
+                    <SignUp onSignUp={onSignUp} />
+                ) : (
+                    <div>
+                        <p>You didn't login, Please Login</p>
+                        <button onClick={() => setShowLogin(true)}>Login</button>
+                        <button onClick={() => setShowSignUp(true)}>Sign Up</button>
+                    </div>
+                )}
+            </div>
+        );
+    }
+
+
     return (
         <div className="profile-page">
             <div className="profile-content">
