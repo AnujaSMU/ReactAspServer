@@ -19,7 +19,7 @@ namespace MCDA_Project.Server.Models
         public string? CreditCardType { get; set; } // Enum-like string: Mastercard, Visa, Amex
 
         // Changed to yy/MM format
-        public DateTime? ExpiryDate { get; set; }
+        public string? ExpiryDate { get; set; }
 
 
         // Navigation Property

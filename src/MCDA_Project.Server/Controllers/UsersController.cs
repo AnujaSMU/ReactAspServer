@@ -48,7 +48,7 @@ namespace MCDA_Project.Server.Controllers
             user.EmailAddress ??= string.Empty;
             user.CreditCardNumber ??= string.Empty;
             user.CreditCardType ??= string.Empty;
-            user.ExpiryDate = user.ExpiryDate == default ? DateTime.Now.AddYears(3) : user.ExpiryDate;
+            user.ExpiryDate ??= string.Empty;
 
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
@@ -166,4 +166,5 @@ namespace MCDA_Project.Server.Controllers
         public string Username { get; set; }
         public string Password { get; set; }
     }
+
 }
