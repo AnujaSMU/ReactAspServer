@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
+import Background from '../assets/Background.png'
 const SignupPage = () => {
     const [formData, setFormData] = useState({
         username: '',
@@ -50,7 +50,7 @@ const SignupPage = () => {
 
     return (
         <div className="flex-1 bg-[#faf9fb] flex items-center justify-center p-8 min-h-screen bg-cover bg-center" 
-        style={{backgroundImage: "url('https://admin.sriboga.com/storage/news/1685519116-asian-cuisine-ingredients-food-background-ginger-2023-05-09-20-34-33-utc.webp')"}}>
+        style={{backgroundImage: `url(${Background})`}}>
             <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-2xl">
                 <h1 className="text-3xl font-bold text-center mb-6">Sign Up</h1>
                 <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">

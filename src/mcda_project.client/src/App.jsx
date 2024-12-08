@@ -6,8 +6,26 @@ import ProfilePage from './pages/ProfilePage';
 import RecipePage from './pages/RecipePage';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
+// import Cookies from 'universal-cookie';
+// import jwt from 'jwt-decode';
 
 function App(){
+    // const cookies = new Cookies();
+    // //const [user, setUser] = useState(null);
+
+    // const logout = () => {
+    //     //setUser(null);
+    //     cookies.remove('AuthToken');
+    // };
+    
+    // const login = (token) => {
+    //     const decoded = jwt(token);
+    //     setUser(decoded);
+    //     cookies.set('AuthToken', token, { 
+    //         expires: new Date(decoded.exp * 1000),
+    //     });
+    // };
+
     return(
         <div className='flex'> 
         <Sidebar/>
