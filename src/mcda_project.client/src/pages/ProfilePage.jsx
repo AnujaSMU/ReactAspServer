@@ -20,25 +20,26 @@ const ProfilePage = () => {
         CreditCardExpiry: '2025-12',
     });
 
-    // State to manage edit modes
+    // State to manage edit modes and auth state
     const [isBasicInfoEdit, setIsBasicInfoEdit] = useState(false);
     const [isBankInfoEdit, setIsBankInfoEdit] = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [showLogin, setShowLogin] = useState(false);
+    const [showSignUp, setShowSignUp] = useState(false);
 
     // Handle save for Basic Information
     const handleBasicInfoSave = () => {
         // Implement API call to save userData here
-        // For demo, we'll just toggle edit mode
         setIsBasicInfoEdit(false);
     };
 
-    // Handle save for Bank Information
+    // Handle save for Bank Information 
     const handleBankInfoSave = () => {
         // Implement API call to save userData here
-        // For demo, we'll just toggle edit mode
         setIsBankInfoEdit(false);
     };
-    
-    // Fetch user data (simulated)
+
+    // Fetch user data
     useEffect(() => {
         const fetchUserData = async () => {
             try {
@@ -95,25 +96,20 @@ const ProfilePage = () => {
 
     // Handle sign up
     const handleSignUp = (newUser) => {
-        // Simulated sign-up process
         setUserData(newUser);
         setIsLoggedIn(true);
         setShowSignUp(false);
     };
 
-    // Automatically update username when first name or last name changes
+    // Update username when name changes
     useEffect(() => {
-        setUserData({
-            ...userData,
-            Username: `${userData.FirstName.toLowerCase()}_${userData.LastName.toLowerCase()}`,
-        });
+        if (userData.FirstName && userData.LastName) {
+            setUserData(prev => ({
+                ...prev,
+                Username: `${prev.FirstName.toLowerCase()}_${prev.LastName.toLowerCase()}`,
+            }));
+        }
     }, [userData.FirstName, userData.LastName]);
-    const onSignUp = (newUser) => {
-        // Simulated sign-up process
-        setUserData(newUser);
-        setIsLoggedIn(true);
-        setShowSignUp(false);
-    };
 
     if (!isLoggedIn) {
         return (
@@ -121,10 +117,10 @@ const ProfilePage = () => {
                 {showLogin ? (
                     <Login onLogin={handleLogin} />
                 ) : showSignUp ? (
-                    <SignUp onSignUp={onSignUp} />
+                    <SignUp onSignUp={handleSignUp} />
                 ) : (
                     <div>
-                        <p>You didn't login, Please Login</p>
+                        <p>Please log in to continue</p>
                         <button onClick={() => setShowLogin(true)}>Login</button>
                         <button onClick={() => setShowSignUp(true)}>Sign Up</button>
                     </div>
@@ -132,7 +128,6 @@ const ProfilePage = () => {
             </div>
         );
     }
-
 
     return (
         <div className="profile-page">
@@ -143,7 +138,13 @@ const ProfilePage = () => {
                     <h2>Basic Information</h2>
                     <button
                         className="edit-button"
-                        onClick={() => setIsBasicInfoEdit(!isBasicInfoEdit)}
+                        onClick={() => {
+                            if (isBasicInfoEdit) {
+                                handleBasicInfoSave();
+                            } else {
+                                setIsBasicInfoEdit(true);
+                            }
+                        }}
                     >
                         {isBasicInfoEdit ? 'Save' : 'Edit'}
                     </button>
@@ -191,7 +192,7 @@ const ProfilePage = () => {
                             />
                         </div>
                         <div className="form-group">
-                            <label>ProvinceState:</label>
+                            <label>Province/State:</label>
                             <input
                                 type="text"
                                 value={userData.ProvinceState}
@@ -219,7 +220,7 @@ const ProfilePage = () => {
                             />
                         </div>
                         <div className="form-group">
-                            <label>PostalCode:</label>
+                            <label>Postal Code:</label>
                             <input
                                 type="text"
                                 value={userData.PostalCode}
@@ -233,9 +234,9 @@ const ProfilePage = () => {
                             />
                         </div>
                         <div className="form-group">
-                            <label>PhoneNumber:</label>
+                            <label>Phone Number:</label>
                             <input
-                                type="text"
+                                type="tel"
                                 value={userData.PhoneNumber}
                                 disabled={!isBasicInfoEdit}
                                 onChange={(e) =>
@@ -247,9 +248,9 @@ const ProfilePage = () => {
                             />
                         </div>
                         <div className="form-group">
-                            <label>EmailAddress:</label>
+                            <label>Email Address:</label>
                             <input
-                                type="text"
+                                type="email"
                                 value={userData.EmailAddress}
                                 disabled={!isBasicInfoEdit}
                                 onChange={(e) =>
@@ -267,7 +268,13 @@ const ProfilePage = () => {
                     <h2>Bank Information</h2>
                     <button
                         className="edit-button"
-                        onClick={() => setIsBankInfoEdit(!isBankInfoEdit)}
+                        onClick={() => {
+                            if (isBankInfoEdit) {
+                                handleBankInfoSave();
+                            } else {
+                                setIsBankInfoEdit(true);
+                            }
+                        }}
                     >
                         {isBankInfoEdit ? 'Save' : 'Edit'}
                     </button>
@@ -291,7 +298,6 @@ const ProfilePage = () => {
                             <select
                                 disabled={!isBankInfoEdit}
                                 className="custom-select"
-                                type="text"
                                 value={userData.CreditCardType}
                                 onChange={(e) =>
                                     setUserData({
@@ -308,7 +314,7 @@ const ProfilePage = () => {
                             </select>
                         </div>
                         <div className="form-group">
-                            <label>CreditCardExpiry Date:</label>
+                            <label>Credit Card Expiry:</label>
                             <input
                                 type="month"
                                 value={userData.CreditCardExpiry}
