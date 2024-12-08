@@ -12,9 +12,8 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-//Caching for easy retrieval of Ingredients
+// Caching for easy retrieval of Ingredients
 builder.Services.AddMemoryCache();
-
 
 builder.Services.AddDbContext<RecipeFinderContext>(options =>
     options.UseMySql(
@@ -22,17 +21,18 @@ builder.Services.AddDbContext<RecipeFinderContext>(options =>
         ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("DefaultConnection"))
     ));
 
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowAll", builder =>
-    {
-        builder.AllowAnyOrigin() // Allow requests from any origin
-              .AllowAnyMethod() // Allow any HTTP method (GET, POST, PUT, DELETE, etc.)
-              .AllowAnyHeader(); // Allow any headers
-    });
-});
+ builder.Services.AddCors(options =>
+ {
+     options.AddPolicy("AllowAll", builder =>
+     {
+         builder.AllowAnyOrigin() // Allow requests from any origin
+               .AllowAnyMethod() // Allow any HTTP method (GET, POST, PUT, DELETE, etc.)
+               .AllowAnyHeader(); // Allow any headers
+     });
+ });
 
 var app = builder.Build();
+
 
 app.UseCors("AllowAll");
 

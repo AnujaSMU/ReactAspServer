@@ -36,8 +36,10 @@ namespace MCDA_Project.Server.Controllers
                 return BadRequest("Username already exists.");
             }
 
+            // Hash password before saving
             user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
 
+            // Ensure optional fields have default values if null
             user.City ??= string.Empty;
             user.ProvinceState ??= string.Empty;
             user.Country ??= string.Empty;
@@ -79,23 +81,28 @@ namespace MCDA_Project.Server.Controllers
             var token = GenerateToken(user);
 
             // Set the token as a cookie
-            Response.Cookies.Append("AuthToken", token, new CookieOptions
-            {
-                HttpOnly = true, // Prevents client-side access
-                Secure = true, // Requires HTTPS
-                SameSite = SameSiteMode.Strict, // Strict cookie sharing
-                Expires = DateTime.UtcNow.AddHours(1) // Token expiration
-            });
+            //Response.Cookies.Append("AuthToken", token, new CookieOptions
+            //{
+            //    HttpOnly = true, // Prevents client-side access
+            //    Secure = true, // Requires HTTPS
+            //    SameSite = SameSiteMode.Strict, // Strict cookie sharing
+            //    Expires = DateTime.UtcNow.AddHours(1) // Token expiration
+            //});
 
-            return Ok($"Welcome, {user.Username}!");
+            return Ok(new
+            {
+                UserID = user.UserID,
+                Token = token
+            });
         }
+    
 
         private string GenerateToken(User user)
         {
             var claims = new[]
             {
-        new Claim(ClaimTypes.Name, user.Username),
-        new Claim(ClaimTypes.NameIdentifier, user.UserID.ToString())
+                new Claim(ClaimTypes.Name, user.Username),
+                new Claim(ClaimTypes.NameIdentifier, user.UserID.ToString())
             };
 
             // Use the key directly from the configuration
@@ -112,7 +119,7 @@ namespace MCDA_Project.Server.Controllers
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-
+        // GET: api/Users/order/{id}
         [HttpGet("order/{id}")]
         public async Task<ActionResult> GetUserDetails(int id)
         {
@@ -123,8 +130,7 @@ namespace MCDA_Project.Server.Controllers
                 {
                     u.FirstName,
                     u.LastName,
-                    CreditCardNumber = MaskCreditCardNumber(u.CreditCardNumber)
-
+                    CreditCardNumber = UsersController.MaskCreditCardNumber(u.CreditCardNumber) // Static method call
                 })
                 .FirstOrDefaultAsync();
 
@@ -138,7 +144,7 @@ namespace MCDA_Project.Server.Controllers
             return Ok(user);
         }
 
-        private string MaskCreditCardNumber(string creditCardNumber)
+        public static string MaskCreditCardNumber(string creditCardNumber)
         {
             // Assuming the CreditCardNumber is in the format: 1231123353351234
             if (string.IsNullOrEmpty(creditCardNumber) || creditCardNumber.Length < 4)
@@ -152,10 +158,6 @@ namespace MCDA_Project.Server.Controllers
         "****", "****", "****", creditCardNumber.Substring(creditCardNumber.Length - 4)
             });
         }
-
-
-
-
     }
 
     // DTO for login request
