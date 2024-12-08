@@ -81,16 +81,21 @@ namespace MCDA_Project.Server.Controllers
             var token = GenerateToken(user);
 
             // Set the token as a cookie
-            Response.Cookies.Append("AuthToken", token, new CookieOptions
-            {
-                HttpOnly = true, // Prevents client-side access
-                Secure = true, // Requires HTTPS
-                SameSite = SameSiteMode.Strict, // Strict cookie sharing
-                Expires = DateTime.UtcNow.AddHours(1) // Token expiration
-            });
+            //Response.Cookies.Append("AuthToken", token, new CookieOptions
+            //{
+            //    HttpOnly = true, // Prevents client-side access
+            //    Secure = true, // Requires HTTPS
+            //    SameSite = SameSiteMode.Strict, // Strict cookie sharing
+            //    Expires = DateTime.UtcNow.AddHours(1) // Token expiration
+            //});
 
-            return Ok($"Welcome, {user.Username}!");
+            return Ok(new
+            {
+                UserID = user.UserID,
+                Token = token
+            });
         }
+    
 
         private string GenerateToken(User user)
         {
