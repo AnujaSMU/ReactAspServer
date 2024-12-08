@@ -38,11 +38,11 @@ namespace MCDA_Project.Server.Controllers
                 return Ok(cachedRecipes);
             }
 
-            // Fetch recipes where all required ingredients are in the provided list
+            // Fetch recipes that match all the given ingredients (exact match)
             var matchingRecipes = _context.Recipes
                 .Where(recipe =>
                     recipe.RecipeIngredients
-                        .All(ri => ingredientIds.Contains(ri.IngredientID)))
+                        .All(ri => ingredientIds.Contains(ri.IngredientID))) // Exact match
                 .Select(recipe => new
                 {
                     recipe.RecipeID,
@@ -55,9 +55,48 @@ namespace MCDA_Project.Server.Controllers
                             ri.Ingredient.IngredientID,
                             ri.Ingredient.Name,
                             ri.Ingredient.CostPerUnit
-                        }).ToList()
+                        }).ToList(),
+                    IsExactMatch = true // Flag for exact match
                 })
+                .Take(12) // Limit the result to a maximum of 12 recipes
                 .ToList();
+
+            // If no recipes are found, expand the search to include recipes with more ingredients
+            if (matchingRecipes.Count < 6)
+            {
+                // Add more recipes that contain at least one of the provided ingredients and may have additional ingredients
+                var additionalRecipes = _context.Recipes
+                    .Where(recipe =>
+                        recipe.RecipeIngredients
+                            .Any(ri => ingredientIds.Contains(ri.IngredientID)) // At least one ingredient matches
+                        && recipe.RecipeIngredients.Count() >= ingredientIds.Count()) // Ensure recipe uses at least the number of given ingredients
+                    .Select(recipe => new
+                    {
+                        recipe.RecipeID,
+                        recipe.Title,
+                        recipe.Description,
+                        Images = recipe.Images.Select(img => img.ImageURL).ToList(),
+                        Ingredients = recipe.RecipeIngredients
+                            .Select(ri => new
+                            {
+                                ri.Ingredient.IngredientID,
+                                ri.Ingredient.Name,
+                                ri.Ingredient.CostPerUnit
+                            }).ToList(),
+                        IsExactMatch = false // Flag for recipes with additional ingredients
+                    })
+                    .Take(12 - matchingRecipes.Count) // Add more recipes, up to a total of 12
+                    .ToList();
+
+                // Combine the results
+                matchingRecipes.AddRange(additionalRecipes);
+            }
+
+            // If no matching recipes found after all attempts, return an empty response
+            if (!matchingRecipes.Any())
+            {
+                return NotFound("No recipes found.");
+            }
 
             // Cache the result
             var cacheOptions = new MemoryCacheEntryOptions
@@ -68,8 +107,9 @@ namespace MCDA_Project.Server.Controllers
 
             _cache.Set(cacheKey, matchingRecipes, cacheOptions);
 
-            return Ok(matchingRecipes);
+            return Ok(matchingRecipes.Take(12)); // Ensure we return a maximum of 12 recipes
         }
+
 
     }
 

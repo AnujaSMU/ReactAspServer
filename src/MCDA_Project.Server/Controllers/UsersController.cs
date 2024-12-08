@@ -113,6 +113,48 @@ namespace MCDA_Project.Server.Controllers
         }
 
 
+        [HttpGet("order/{id}")]
+        public async Task<ActionResult> GetUserDetails(int id)
+        {
+            // Fetch the user with the specified UserID
+            var user = await _context.Users
+                .Where(u => u.UserID == id)
+                .Select(u => new
+                {
+                    u.FirstName,
+                    u.LastName,
+                    CreditCardNumber = MaskCreditCardNumber(u.CreditCardNumber)
+
+                })
+                .FirstOrDefaultAsync();
+
+            // Check if the user exists
+            if (user == null)
+            {
+                return NotFound(new { Message = $"User with ID {id} not found." });
+            }
+
+            // Return the user details
+            return Ok(user);
+        }
+
+        private string MaskCreditCardNumber(string creditCardNumber)
+        {
+            // Assuming the CreditCardNumber is in the format: 1231123353351234
+            if (string.IsNullOrEmpty(creditCardNumber) || creditCardNumber.Length < 4)
+            {
+                return creditCardNumber; // Return the original if it is too short or null
+            }
+
+            // Mask all but the last 4 digits
+            return string.Join(" ", new string[]
+            {
+        "****", "****", "****", creditCardNumber.Substring(creditCardNumber.Length - 4)
+            });
+        }
+
+
+
 
     }
 
