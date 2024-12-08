@@ -125,7 +125,7 @@ namespace MCDA_Project.Server.Controllers
                 {
                     u.FirstName,
                     u.LastName,
-                    CreditCardNumber = MaskCreditCardNumber(u.CreditCardNumber) // Mask the credit card number
+                    CreditCardNumber = UsersController.MaskCreditCardNumber(u.CreditCardNumber) // Static method call
                 })
                 .FirstOrDefaultAsync();
 
@@ -139,7 +139,7 @@ namespace MCDA_Project.Server.Controllers
             return Ok(user);
         }
 
-        private string MaskCreditCardNumber(string creditCardNumber)
+        public static string MaskCreditCardNumber(string creditCardNumber)
         {
             // Assuming the CreditCardNumber is in the format: 1231123353351234
             if (string.IsNullOrEmpty(creditCardNumber) || creditCardNumber.Length < 4)
@@ -150,7 +150,7 @@ namespace MCDA_Project.Server.Controllers
             // Mask all but the last 4 digits
             return string.Join(" ", new string[]
             {
-                "****", "****", "****", creditCardNumber.Substring(creditCardNumber.Length - 4)
+        "****", "****", "****", creditCardNumber.Substring(creditCardNumber.Length - 4)
             });
         }
     }

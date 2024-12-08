@@ -21,21 +21,20 @@ builder.Services.AddDbContext<RecipeFinderContext>(options =>
         ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("DefaultConnection"))
     ));
 
-// Remove the CORS-related code
-// builder.Services.AddCors(options =>
-// {
-//     options.AddPolicy("AllowAll", builder =>
-//     {
-//         builder.AllowAnyOrigin() // Allow requests from any origin
-//               .AllowAnyMethod() // Allow any HTTP method (GET, POST, PUT, DELETE, etc.)
-//               .AllowAnyHeader(); // Allow any headers
-//     });
-// });
+ builder.Services.AddCors(options =>
+ {
+     options.AddPolicy("AllowAll", builder =>
+     {
+         builder.AllowAnyOrigin() // Allow requests from any origin
+               .AllowAnyMethod() // Allow any HTTP method (GET, POST, PUT, DELETE, etc.)
+               .AllowAnyHeader(); // Allow any headers
+     });
+ });
 
 var app = builder.Build();
 
-// Remove the CORS middleware
-// app.UseCors("AllowAll");
+
+app.UseCors("AllowAll");
 
 app.UseDefaultFiles();
 app.UseStaticFiles();
