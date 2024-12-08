@@ -2,6 +2,10 @@
 using Microsoft.EntityFrameworkCore;
 using MCDA_Project.Server.Models;
 using MCDA_Project.Server.Data;
+using System.Security.Claims;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace MCDA_Project.Server.Controllers
 {
@@ -10,10 +14,12 @@ namespace MCDA_Project.Server.Controllers
     public class UsersController : ControllerBase
     {
         private readonly RecipeFinderContext _context;
+        private readonly IConfiguration _configuration; // Injected for token configuration
 
-        public UsersController(RecipeFinderContext context)
+        public UsersController(RecipeFinderContext context, IConfiguration configuration)
         {
             _context = context;
+            _configuration = configuration;
         }
 
         // POST: api/Users/Register
@@ -50,7 +56,7 @@ namespace MCDA_Project.Server.Controllers
 
         // POST: api/Users/Authenticate
         [HttpPost("Authenticate")]
-        public async Task<ActionResult<string>> AuthenticateUser([FromBody] LoginRequest loginRequest)
+        public async Task<ActionResult> AuthenticateUser([FromBody] LoginRequest loginRequest)
         {
             if (string.IsNullOrEmpty(loginRequest.Username) || string.IsNullOrEmpty(loginRequest.Password))
             {
@@ -64,15 +70,50 @@ namespace MCDA_Project.Server.Controllers
                 return Unauthorized("Invalid username.");
             }
 
-            // Verify the password
             if (!BCrypt.Net.BCrypt.Verify(loginRequest.Password, user.Password))
             {
                 return Unauthorized("Invalid password.");
             }
 
-            // Authentication successful
+            // Generate a token
+            var token = GenerateToken(user);
+
+            // Set the token as a cookie
+            Response.Cookies.Append("AuthToken", token, new CookieOptions
+            {
+                HttpOnly = true, // Prevents client-side access
+                Secure = true, // Requires HTTPS
+                SameSite = SameSiteMode.Strict, // Strict cookie sharing
+                Expires = DateTime.UtcNow.AddHours(1) // Token expiration
+            });
+
             return Ok($"Welcome, {user.Username}!");
         }
+
+        private string GenerateToken(User user)
+        {
+            var claims = new[]
+            {
+        new Claim(ClaimTypes.Name, user.Username),
+        new Claim(ClaimTypes.NameIdentifier, user.UserID.ToString())
+            };
+
+            // Use the key directly from the configuration
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            var token = new JwtSecurityToken(
+                issuer: _configuration["Jwt:Issuer"],
+                audience: _configuration["Jwt:Audience"],
+                claims: claims,
+                expires: DateTime.UtcNow.AddHours(1),
+                signingCredentials: creds);
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+
+
     }
 
     // DTO for login request
