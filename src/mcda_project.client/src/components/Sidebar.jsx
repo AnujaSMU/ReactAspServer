@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { User, Home, LogOut } from "lucide-react";
+import { User, Home, LogOut ,LogIn } from "lucide-react";
 
 import Cookies from 'universal-cookie';
 
@@ -16,6 +16,7 @@ const Sidebar = () => {
 
   const logout = () => {
     cookies.remove('AuthToken');
+    cookies.remove('userID');
     setIsLoggedIn(false);
     navigate('/login');
   };
@@ -36,11 +37,16 @@ const Sidebar = () => {
                         <User size={"24"} />
                         <span className='font-bold hidden md:block'>Profile</span>
                     </Link>
-                ) : (
+                ) : ( <div  className='flex flex-col gap-8'>
                     <Link to={"/signup"} className='flex gap-1'>
                         <User size={"24"} />
                         <span className='font-bold hidden md:block'>Sign Up</span>
                     </Link>
+                    <Link to={"/login"} className='flex gap-2'>
+                        <LogIn size={"24"} />
+                        <span className='font-bold hidden md:block'>Login</span>
+                    </Link>
+                    </div>
                 )}
                 {isLoggedIn && (
                     <button onClick={logout} className='flex gap-1 text-red-600 hover:text-red-700'>

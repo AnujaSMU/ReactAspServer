@@ -13,7 +13,7 @@ const HomePage = () => {
     useEffect(() => {
         const fetchIngredients = async () => {
             try {
-                const response = await fetch('https://localhost:7200/api/Ingredients');
+                const response = await fetch('/api/Ingredients');
                 const data = await response.json();
                 const formattedIngredients = data.map(ingredient => ({
                     value: ingredient.ingredientID,
@@ -35,7 +35,7 @@ const HomePage = () => {
         setLoading(true);
         setRecipes([]);
         try {
-            const response = await fetch(`https://localhost:7200/api/RecipeSearch/FindByIngredients`, {
+            const response = await fetch(`/api/RecipeSearch/FindByIngredients`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -57,7 +57,7 @@ const HomePage = () => {
 
     const fetchTrending = async () => {
         try {
-            const response = await fetch('https://localhost:7200/api/Recipe/trending-recipes');
+            const response = await fetch('/api/Recipe/trending-recipes');
             const data = await response.json();
             // const data = {
             //     results: [

@@ -40,12 +40,27 @@ const SignupPage = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        // TODO: Implement signup logic here
-        console.log('Signup attempted with:', formData);
-        
-        alert('Sign up successful!');
-        
-        navigate('/login');
+        try {
+            const response = await fetch('/api/Users/Register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData)
+            });
+
+            if (!response.ok) {
+                alert('Registration failed');
+                throw new Error('Registration failed');
+            }
+
+            console.log('Signup attempted with:', formData);
+            alert('Sign up successful!');
+            navigate('/login');
+        } catch (error) {
+            console.error('Registration error:', error);
+            alert('Registration failed. Please try again.');
+        }
     };
 
     return (
@@ -215,8 +230,9 @@ const SignupPage = () => {
                             className={`w-full p-2 border rounded-md focus:outline-none focus:ring-2 ${!formData.country && formData.country !== '' ? 'border-red-500 focus:ring-red-500' : 'focus:ring-lime-500'}`}
                             required
                         >
-                            <option value="Canada">Canada</option>
                             <option value="USA">USA</option>
+                            <option value="Canada">Canada</option>
+                            
                         </select>
                     </div>
 
@@ -253,17 +269,17 @@ const SignupPage = () => {
                     </div>
 
                     <div>
-                        <label className={`block text-sm font-medium mb-1 ${!formData.emailAddress.match(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/) && formData.emailAddress ? 'text-red-500' : 'text-gray-700'}`}>
+                        <label className={`block text-sm font-medium mb-1 ${formData.emailAddress ? 'text-red-500' : 'text-gray-700'}`}>
                             Email Address
                         </label>
                         <input
-                            type="email"
+                            type="email" 
                             name="emailAddress"
                             value={formData.emailAddress}
                             onChange={handleChange}
-                            className={`w-full p-2 border rounded-md focus:outline-none focus:ring-2 ${!formData.emailAddress.match(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/) && formData.emailAddress ? 'border-red-500 focus:ring-red-500' : 'focus:ring-lime-500'}`}
+                            className={`w-full p-2 border rounded-md focus:outline-none focus:ring-2 ${ formData.emailAddress ? 'border-red-500 focus:ring-red-500' : 'focus:ring-lime-500'}`}
                             required
-                            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                            pattern="^[\w.-]+@[\w.-]+\.[a-zA-Z]{2,}$"
                             title="Please enter a valid email address"
                         />
                     </div>

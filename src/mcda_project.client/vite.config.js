@@ -43,10 +43,10 @@ export default defineConfig({
     },
     server: {
         proxy: {
-            '/api/Users/Authenticate': {
+            '/api': {
                 target: target,
                 changeOrigin: true,
-                secure: false,
+                secure: false
             }
         },
         port: 5173,

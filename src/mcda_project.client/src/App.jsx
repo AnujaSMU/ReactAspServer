@@ -10,21 +10,6 @@ import SignupPage from './pages/SignupPage';
 // import jwt from 'jwt-decode';
 
 function App(){
-    // const cookies = new Cookies();
-    // //const [user, setUser] = useState(null);
-
-    // const logout = () => {
-    //     //setUser(null);
-    //     cookies.remove('AuthToken');
-    // };
-    
-    // const login = (token) => {
-    //     const decoded = jwt(token);
-    //     setUser(decoded);
-    //     cookies.set('AuthToken', token, { 
-    //         expires: new Date(decoded.exp * 1000),
-    //     });
-    // };
 
     return(
         <div className='flex'> 
