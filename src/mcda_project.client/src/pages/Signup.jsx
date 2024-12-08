@@ -253,20 +253,20 @@ const SignUp = ({ onSignUp }) => {
                         value={userData.CreditCardType}
                         onChange={(e) => setUserData({...userData, CreditCardType: e.target.value})}
                     >
-                    <option value="Visa">Visa</option>
-                    <option value="MasterCard">MasterCard</option>
-                    <option value="American Express">American Express</option>
-                    <option value="Discover">Discover</option>
-                </select>
-                {errors.CreditCardType && <div className="error-message">{errors.CreditCardType}</div>}
-            </div>
-            <div className="form-group">
-                <label>Credit Card Expiry Date:</label>
-                <input
-                    type="text"
-                    value={userData.CreditCardExpiry}
-                    onChange={(e) => setUserData({...userData, CreditCardExpiry: e.target.value})}
-                />
+                        <option value="Visa">Visa</option>
+                        <option value="MasterCard">MasterCard</option>
+                        <option value="American Express">American Express</option>
+                        <option value="Discover">Discover</option>
+                    </select>
+                    {errors.CreditCardType && <div className="error-message">{errors.CreditCardType}</div>}
+                </div>
+                <div className="form-group">
+                    <label>Credit Card Expiry Date:</label>
+                    <input
+                        type="text"
+                        value={userData.CreditCardExpiry}
+                        onChange={(e) => setUserData({...userData, CreditCardExpiry: e.target.value})}
+                    />
                     {errors.CreditCardExpiry && <div className="error-message">{errors.CreditCardExpiry}</div>}
                 </div>
                 <button onClick={handleSignUp}>Sign Up</button>

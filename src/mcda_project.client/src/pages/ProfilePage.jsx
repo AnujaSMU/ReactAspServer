@@ -204,6 +204,12 @@ const ProfilePage = () => {
             Username: `${userData.FirstName.toLowerCase()}_${userData.LastName.toLowerCase()}`,
         });
     }, [userData.FirstName, userData.LastName]);
+    const onSignUp = (newUser) => {
+        // Simulated sign-up process
+        setUserData(newUser);
+        setIsLoggedIn(true);
+        setShowSignUp(false);
+    };
 
     if (!isLoggedIn) {
         return (
@@ -211,16 +217,18 @@ const ProfilePage = () => {
                 {showLogin ? (
                     <Login onLogin={handleLogin} />
                 ) : showSignUp ? (
-                    <SignUp onSignUp={handleSignUp} />
+                    <SignUp onSignUp={onSignUp} />
                 ) : (
                     <div>
                         <p>You didn't login, Please Login</p>
                         <button onClick={() => setShowLogin(true)}>Login</button>
+                        <button onClick={() => setShowSignUp(true)}>Sign Up</button>
                     </div>
                 )}
             </div>
         );
     }
+
 
     return (
         <div className="profile-page">
