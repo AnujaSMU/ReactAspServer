@@ -137,7 +137,7 @@ function RecipePage() {
                 <div key={ingredient.ingredientID} className="flex justify-between items-center">
                   <div>
                     <p className="font-semibold">{ingredient.name}</p>
-                    <p className="text-sm text-gray-600">${ingredient.costPerUnit} per {ingredient.quantity}</p>
+                    <p className="text-sm text-gray-600">${ingredient.costPerUnit} per {ingredient.quantity} oz</p>
                   </div>
                   <p className="font-semibold">${(ingredient.quantity * ingredient.costPerUnit).toFixed(2)}</p>
                 </div>

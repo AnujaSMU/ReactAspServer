@@ -6,6 +6,7 @@ import ProfilePage from './pages/ProfilePage';
 import RecipePage from './pages/RecipePage';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
+import RecipeBuilder from './pages/RecipeBuilder';
 // import Cookies from 'universal-cookie';
 // import jwt from 'jwt-decode';
 
@@ -20,6 +21,7 @@ function App(){
             <Route path ='/recipe/:recipeID' element={<RecipePage/>}/>
             <Route path ='/login' element={<LoginPage/>}/>
             <Route path ='/signup' element={<SignupPage/>}/>
+            <Route path="/recipe/new" element={<RecipeBuilder />} />
         </Routes>
 
         </div>

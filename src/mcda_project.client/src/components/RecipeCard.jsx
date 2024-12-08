@@ -16,9 +16,9 @@ return (
             <p className="my-2 overflow-hidden text-ellipsis whitespace-nowrap max-w-xs hover:whitespace-normal hover:text-ellipsis hover:max-w-none">
                 {recipe.description}
             </p>
-            <div className="flex flex-wrap gap-2 mt-auto">
-                    {recipe.ingredients.slice(0, recipe.ingredients.length).map((ingredient, index) => (
-                        <div key={index} className={`flex gap-1 bg-lime-300 items-center p-1 rounded-md ${index >= 3 ? 'hidden group-hover:flex' : ''}`}>
+            <div className="flex flex-wrap gap-2 mt-auto group">
+                    {recipe.ingredients.map((ingredient, index) => (
+                        <div key={index} className={`flex gap-1 bg-lime-300 items-center p-1 rounded-md w-fit ${index >= 4 ? 'hidden group-hover:block' : ''}`}>
                             <ForkKnife size={16} />
                             <span className="text-sm tracking-tighter font-semibold">{ingredient.name}</span>
                         </div>
