@@ -57,75 +57,75 @@ const HomePage = () => {
 
     const fetchTrending = async () => {
         try {
-            //const response = await fetch('https://localhost:7200/api/Recipe/trending-recipes');
-            //const data = await response.json();
-            const data = {
-                results: [
-                    {
-                        "recipeID": 1,
-                        "title": "Spaghetti Carbonara",
-                        "description": "Classic Italian pasta dish",
-                        "steps": "1. Boil pasta\n2. Cook pancetta\n3. Mix eggs and cheese\n4. Combine all ingredients",
-                        "authorID": 123,
-                        "views": 1500,
-                        "ingredients": [
-                            {
-                                "ingredientID": 1,
-                                "name": "Spaghetti",
-                                "costPerUnit": 2.99,
-                                "unit": "Lb"
-                            },
-                            {
-                                "ingredientID": 2,
-                                "name": "Eggs",
-                                "costPerUnit": 1.50,
-                                "unit": "piece"
-                            },
-                            {
-                                "ingredientID": 3,
-                                "name": "Tomato",
-                                "costPerUnit": 0.50,
-                                "unit": "piece"
-                            },
-                            {
-                                "ingredientID": 4,
-                                "name": "Chicken",
-                                "costPerUnit": 5.99,
-                                "unit": "Lb"
-                            }
-                        ],
-                        "images": [
-                            {
-                                "imageID": 1,
-                                "ImageUrl": "https://static.wikia.nocookie.net/da7f4324-f6f9-4ae7-91f9-9680eac4cb64/scale-to-width/755"
-                            }
-                        ]
-                    },
-                    {
-                        "recipeID": 2,
-                        "title": "Chicken Alfredo",
-                        "description": "Creamy and delicious chicken Alfredo",
-                        "steps": "1. Cook pasta\n2. Cook chicken\n3. Mix cream and cheese\n4. Combine all ingredients",
-                        "authorID": 123,
-                        "views": 1000,
-                        "ingredients": [
-                            {
-                                "ingredientID": 4,
-                                "name": "Chicken",
-                                "costPerUnit": 5.99,
-                                "unit": "Lb"
-                            },
-                        ],
-                        "images": [
-                            {
-                                "imageID": 2,
-                                "imageUrl": "https://static.wikia.nocookie.net/da7f4324-f6f9-4ae7-91f9-9680eac4cb64/scale-to-width/755"
-                            },
-                        ]
-                    }
-                ]
-            };
-            setRecipes(data.results);
+            const response = await fetch('https://localhost:7200/api/Recipe/trending-recipes');
+            const data = await response.json();
+            // const data = {
+            //     results: [
+            //         {
+            //             "recipeID": 1,
+            //             "title": "Spaghetti Carbonara",
+            //             "description": "Classic Italian pasta dish",
+            //             "steps": "1. Boil pasta\n2. Cook pancetta\n3. Mix eggs and cheese\n4. Combine all ingredients",
+            //             "authorID": 123,
+            //             "views": 1500,
+            //             "ingredients": [
+            //                 {
+            //                     "ingredientID": 1,
+            //                     "name": "Spaghetti",
+            //                     "costPerUnit": 2.99,
+            //                     "unit": "Lb"
+            //                 },
+            //                 {
+            //                     "ingredientID": 2,
+            //                     "name": "Eggs",
+            //                     "costPerUnit": 1.50,
+            //                     "unit": "piece"
+            //                 },
+            //                 {
+            //                     "ingredientID": 3,
+            //                     "name": "Tomato",
+            //                     "costPerUnit": 0.50,
+            //                     "unit": "piece"
+            //                 },
+            //                 {
+            //                     "ingredientID": 4,
+            //                     "name": "Chicken",
+            //                     "costPerUnit": 5.99,
+            //                     "unit": "Lb"
+            //                 }
+            //             ],
+            //             "images": [
+            //                 {
+            //                     "imageID": 1,
+            //                     "ImageUrl": "https://static.wikia.nocookie.net/da7f4324-f6f9-4ae7-91f9-9680eac4cb64/scale-to-width/755"
+            //                 }
+            //             ]
+            //         },
+            //         {
+            //             "recipeID": 2,
+            //             "title": "Chicken Alfredo",
+            //             "description": "Creamy and delicious chicken Alfredo",
+            //             "steps": "1. Cook pasta\n2. Cook chicken\n3. Mix cream and cheese\n4. Combine all ingredients",
+            //             "authorID": 123,
+            //             "views": 1000,
+            //             "ingredients": [
+            //                 {
+            //                     "ingredientID": 4,
+            //                     "name": "Chicken",
+            //                     "costPerUnit": 5.99,
+            //                     "unit": "Lb"
+            //                 },
+            //             ],
+            //             "images": [
+            //                 {
+            //                     "imageID": 2,
+            //                     "imageUrl": "https://static.wikia.nocookie.net/da7f4324-f6f9-4ae7-91f9-9680eac4cb64/scale-to-width/755"
+            //                 },
+            //             ]
+            //         }
+            //     ]
+            // };
+            setRecipes(data);
             //setRecipes(data);
             setLoading(false);
         } catch (error) {

@@ -1,60 +1,54 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
+import Background from '../assets/Background.png'
 
 function RecipePage() {
   const { recipeID } = useParams();
-  const recipe = {
-                    "recipeID": 1,
-                    "title": "Spaghetti Carbonara",
-                    "description": "Classic Italian pasta dish",
-                    "Steps": "1. Cook pasta. 2. Fry pancetta. 3. Mix eggs and cheese. 4. Combine pasta, pancetta, and egg mixture.",
-                    "author": {
-                      "userID": 1,
-                      "username": "testuser"
-                    },
-                    "views": 1500,
-                    "ingredients": [
-                      {
-                        "ingredientID": 1,
-                        "name": "Spaghetti",
-                        "quantity": 1.5,
-                        "costPerUnit": 1.5
-                      },
-                      {
-                        "ingredientID": 2,
-                        "name": "Tomato",
-                        "quantity": 2.3,
-                        "costPerUnit": 0.75
-                      },
-                      {
-                        "ingredientID": 3,
-                        "name": "Chicken Breast",
-                        "quantity": 3.7,
-                        "costPerUnit": 3.5
-                      },
-                      {
-                        "ingredientID": 4,
-                        "name": "Ground Beef",
-                        "quantity": 4.2,
-                        "costPerUnit": 4
-                      }
-                    ],
-                    "Images": [
-                        {
-                            "ImageID": 1,
-                            "ImageUrl": "https://static.wikia.nocookie.net/da7f4324-f6f9-4ae7-91f9-9680eac4cb64/scale-to-width/755"
-                        }
-                    ]
-                };
+  const [recipe, setRecipe] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchRecipe = async () => {
+      try {
+        const response = await fetch(`https://localhost:7200/api/Recipe/${recipeID}`);
+        const data = await response.json();
+        setRecipe(data);
+      } catch (error) {
+        console.error('Error fetching recipe:', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchRecipe();
+  }, [recipeID]); // Add recipeID as dependency
+
+  if (loading) {
+    return (
+      <div className="flex-1 bg-[#faf9fb] flex items-center justify-center">
+        <p>Loading...</p>
+      </div>
+    );
+  }
+
+  if (!recipe) {
+    return (
+      <div className="flex-1 bg-[#faf9fb] flex items-center justify-center">
+        <p>Recipe not found</p>
+      </div>
+    );
+  }
 
   return (
     <div className="flex-1 bg-[#faf9fb]">
       <div className="h-96 w-full relative">
-        <img 
-          src={recipe.Images[0].ImageUrl} 
-          alt={recipe.title}
-          className="w-full h-full object-cover"
-        />
+        
+          <img 
+            src={Background}//{recipe.Images[0].ImageUrl} 
+            alt={recipe.title}
+            className="w-full h-full object-cover"
+          />
+        
         <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-8">
           <h1 className="text-4xl font-bold text-white">{recipe.title}</h1>
           <p className="text-white/80 mt-2">{recipe.description}</p>
@@ -72,7 +66,7 @@ function RecipePage() {
                     <div className="flex items-center gap-2">
                       <span className="font-semibold">{ingredient.name}</span>
                       <span className="text-sm text-gray-600">
-                        (${ingredient.costPerUnit} per {ingredient.unit})
+                        (${ingredient.costPerUnit} per {ingredient.quantity})
                       </span>
                     </div>
                   </div>
@@ -83,14 +77,16 @@ function RecipePage() {
             <div className="bg-white rounded-lg shadow-md p-6">
               <h2 className="text-2xl font-bold mb-4">Instructions</h2>
               <div className="flex flex-col gap-4">
-                {recipe.Steps.split('. ').filter(step => step && !(/^\d+$/.test(step))).map((step, index) => (
-                  <div key={index} className="flex gap-4 items-start">
-                    <span className="bg-lime-500 text-white w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0">
-                      {index + 1}
-                    </span>
-                    <p className="text-gray-700">{step.replace(/^\d+\.\s*/, '').trim()}</p>
-                  </div>
-                ))}
+                {recipe.steps && recipe.steps.split('. ')
+                  .filter(step => step && !(/^\d+$/.test(step)))
+                  .map((step, index) => (
+                    <div key={index} className="flex gap-4 items-start">
+                      <span className="bg-lime-500 text-white w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0">
+                        {index + 1}
+                      </span>
+                      <p className="text-gray-700">{step.replace(/^\d+\.\s*/, '').trim()}</p>
+                    </div>
+                  ))}
               </div>
             </div>
           </div>
@@ -98,7 +94,7 @@ function RecipePage() {
           <div className="w-64 bg-white rounded-lg shadow-md p-6 h-fit">
             <div className="text-2xl font-bold mb-2">Total Price</div>
             <div className="text-3xl font-bold text-lime-600 mb-4">
-              ${recipe.ingredients.reduce((total, ing) => total + (ing.quantity * ing.costPerUnit), 0).toFixed(2)}
+              ${recipe.ingredients && recipe.ingredients.reduce((total, ing) => total + (ing.quantity || 0) * ing.costPerUnit, 0).toFixed(2)}
             </div>
             <button className="w-full bg-lime-500 text-white py-3 rounded-md hover:bg-lime-600 transition-colors font-semibold">
               Buy Ingredients
