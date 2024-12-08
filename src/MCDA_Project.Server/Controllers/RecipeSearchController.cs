@@ -38,26 +38,48 @@ namespace MCDA_Project.Server.Controllers
                 return Ok(cachedRecipes);
             }
 
-            // Fetch recipes where all required ingredients are in the provided list
-            var matchingRecipes = _context.Recipes
-                .Where(recipe =>
-                    recipe.RecipeIngredients
-                        .All(ri => ingredientIds.Contains(ri.IngredientID)))
-                .Select(recipe => new
+            List<object> matchingRecipes = null;
+
+            // Start with all ingredients and progressively reduce
+            for (int i = 0; i < ingredientIds.Count && matchingRecipes == null; i++)
+            {
+                // Get the current subset of ingredients (N-i)
+                var currentIngredients = ingredientIds.Take(ingredientIds.Count - i).ToList();
+
+                // Fetch recipes where all required ingredients are in the current subset
+                matchingRecipes = _context.Recipes
+                    .Where(recipe =>
+                        recipe.RecipeIngredients
+                            .All(ri => currentIngredients.Contains(ri.IngredientID)))
+                    .Select(recipe => new
+                    {
+                        recipe.RecipeID,
+                        recipe.Title,
+                        recipe.Description,
+                        Images = recipe.Images.Select(img => img.ImageURL).ToList(),
+                        Ingredients = recipe.RecipeIngredients
+                            .Select(ri => new
+                            {
+                                ri.Ingredient.IngredientID,
+                                ri.Ingredient.Name,
+                                ri.Ingredient.CostPerUnit
+                            }).ToList()
+                    })
+                    .Take(6) // Limit the result to 6 recipes
+                    .ToList();
+
+                // If the result is not empty, we stop searching with smaller subsets
+                if (matchingRecipes.Any())
                 {
-                    recipe.RecipeID,
-                    recipe.Title,
-                    recipe.Description,
-                    Images = recipe.Images.Select(img => img.ImageURL).ToList(),
-                    Ingredients = recipe.RecipeIngredients
-                        .Select(ri => new
-                        {
-                            ri.Ingredient.IngredientID,
-                            ri.Ingredient.Name,
-                            ri.Ingredient.CostPerUnit
-                        }).ToList()
-                })
-                .ToList();
+                    break;
+                }
+            }
+
+            // If no matching recipes found, return an empty response
+            if (matchingRecipes == null || !matchingRecipes.Any())
+            {
+                return NotFound("No recipes found.");
+            }
 
             // Cache the result
             var cacheOptions = new MemoryCacheEntryOptions
@@ -70,6 +92,7 @@ namespace MCDA_Project.Server.Controllers
 
             return Ok(matchingRecipes);
         }
+
 
     }
 
