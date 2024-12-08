@@ -147,6 +147,9 @@ const SignupPage = () => {
                         <label className={`block text-sm font-medium mb-1 ${!formData.firstName.match(/^[A-Za-z\s]+$/) && formData.firstName ? 'text-red-500' : 'text-gray-700'}`}>
                             First Name
                         </label>
+                        {!formData.firstName.match(/^[A-Za-z\s]+$/) && formData.firstName && (
+                            <p className="text-sm text-red-500 mt-1">Please enter a valid first name (letters only)</p>
+                        )}
                         <input
                             type="text"
                             name="firstName"
@@ -155,7 +158,6 @@ const SignupPage = () => {
                             className={`w-full p-2 border rounded-md focus:outline-none focus:ring-2 ${!formData.firstName.match(/^[A-Za-z\s]+$/) && formData.firstName ? 'border-red-500 focus:ring-red-500' : 'focus:ring-lime-500'}`}
                             required
                             pattern="[A-Za-z\s]+"
-                            title="Please enter a valid first name (letters only)"
                         />
                     </div>
 
@@ -163,6 +165,9 @@ const SignupPage = () => {
                         <label className={`block text-sm font-medium mb-1 ${!formData.lastName.match(/^[A-Za-z\s]+$/) && formData.lastName ? 'text-red-500' : 'text-gray-700'}`}>
                             Last Name
                         </label>
+                        {!formData.lastName.match(/^[A-Za-z\s]+$/) && formData.lastName && (
+                            <p className="text-sm text-red-500 mt-1">Please enter a valid last name (letters only)</p>
+                        )}
                         <input
                             type="text"
                             name="lastName"
@@ -179,6 +184,9 @@ const SignupPage = () => {
                         <label className={`block text-sm font-medium mb-1 ${!formData.city.match(/^[A-Za-z\s]+$/) && formData.city ? 'text-red-500' : 'text-gray-700'}`}>
                             City
                         </label>
+                        {!formData.city.match(/^[A-Za-z\s]+$/) && formData.city && (
+                            <p className="text-sm text-red-500 mt-1">Please enter a valid city name (letters only)</p>
+                        )}
                         <input
                             type="text"
                             name="city"
@@ -240,6 +248,9 @@ const SignupPage = () => {
                         <label className={`block text-sm font-medium mb-1 ${!formData.postalCode.match(formData.country === "USA" ? /^[0-9]{5}(?:-[0-9]{4})?$/ : /^[A-Za-z][0-9][A-Za-z]\s?[0-9][A-Za-z][0-9]$/) && formData.postalCode ? 'text-red-500' : 'text-gray-700'}`}>
                             Postal Code
                         </label>
+                        {!formData.postalCode.match(formData.country === "USA" ? /^[0-9]{5}(?:-[0-9]{4})?$/ : /^[A-Za-z][0-9][A-Za-z]\s?[0-9][A-Za-z][0-9]$/) && formData.postalCode && (
+                            <p className="text-sm text-red-500 mt-1">Please enter a valid postal code</p>
+                        )}
                         <input
                             type="text"
                             name="postalCode"
@@ -253,31 +264,41 @@ const SignupPage = () => {
                     </div>
 
                     <div>
-                        <label className={`block text-sm font-medium mb-1 ${!formData.phoneNumber.match(/^\+?1?\d{10,}$/) && formData.phoneNumber ? 'text-red-500' : 'text-gray-700'}`}>
+                        <label className={`block text-sm font-medium mb-1 ${!formData.phoneNumber.match(/^\+?1?[2-9][0-9]{2}[2-9][0-9]{6}$/) && formData.phoneNumber ? 'text-red-500' : 'text-gray-700'}`}>
                             Phone Number
                         </label>
+                        {!formData.phoneNumber.match(/^\+?1?[2-9][0-9]{2}[2-9][0-9]{6}$/) && formData.phoneNumber && (
+                            <p className="text-red-500 text-xs mt-1 mb-2">
+                                Please enter a valid US/Canadian phone number (e.g. +12125551234)
+                            </p>
+                        )}
                         <input
                             type="tel"
                             name="phoneNumber"
                             value={formData.phoneNumber}
                             onChange={handleChange}
-                            className={`w-full p-2 border rounded-md focus:outline-none focus:ring-2 ${!formData.phoneNumber.match(/^\+?1?\d{10,}$/) && formData.phoneNumber ? 'border-red-500 focus:ring-red-500' : 'focus:ring-lime-500'}`}
+                            className={`w-full p-2 border rounded-md focus:outline-none focus:ring-2 ${!formData.phoneNumber.match(/^\+?1?[2-9][0-9]{2}[2-9][0-9]{6}$/) && formData.phoneNumber ? 'border-red-500 focus:ring-red-500' : 'focus:ring-lime-500'}`}
                             required
-                            pattern="^\+?1?\d{10,}$"
-                            title="Please enter a valid phone number (minimum 10 digits)"
+                            pattern="^\+?1?[2-9][0-9]{2}[2-9][0-9]{6}$"
+                            title="Please enter a valid US/Canadian phone number (e.g. 2125551234)"
                         />
                     </div>
 
                     <div>
-                        <label className={`block text-sm font-medium mb-1 ${formData.emailAddress ? 'text-red-500' : 'text-gray-700'}`}>
+                        <label className={`block text-sm font-medium mb-1 ${!formData.emailAddress.match(/^[\w.-]+@[\w.-]+\.[a-zA-Z]{2,}$/) && formData.emailAddress ? 'text-red-500' : 'text-gray-700'}`}>
                             Email Address
                         </label>
+                        {!formData.emailAddress.match(/^[\w.-]+@[\w.-]+\.[a-zA-Z]{2,}$/) && formData.emailAddress && (
+                            <p className="text-red-500 text-xs mt-1 mb-2">
+                                Please enter a valid email address
+                            </p>
+                        )}
                         <input
                             type="email" 
                             name="emailAddress"
                             value={formData.emailAddress}
                             onChange={handleChange}
-                            className={`w-full p-2 border rounded-md focus:outline-none focus:ring-2 ${ formData.emailAddress ? 'border-red-500 focus:ring-red-500' : 'focus:ring-lime-500'}`}
+                            className={`w-full p-2 border rounded-md focus:outline-none focus:ring-2 ${!formData.emailAddress.match(/^[\w.-]+@[\w.-]+\.[a-zA-Z]{2,}$/) && formData.emailAddress ? 'border-red-500 focus:ring-red-500' : 'focus:ring-lime-500'}`}
                             required
                             pattern="^[\w.-]+@[\w.-]+\.[a-zA-Z]{2,}$"
                             title="Please enter a valid email address"
@@ -290,18 +311,38 @@ const SignupPage = () => {
                     </div>
 
                     <div>
-                        <label className={`block text-sm font-medium mb-1 ${!formData.creditCardNumber.match(/^(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|3[47][0-9]{13})$/) && formData.creditCardNumber ? 'text-red-500' : 'text-gray-700'}`}>
+                        <label className={`block text-sm font-medium mb-1 ${!formData.creditCardNumber ? 'text-red-500' : 'text-gray-700'}`}>
                             Credit Card Number
                         </label>
+                        {!formData.creditCardNumber.match(/^(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|3[47][0-9]{13})$/) && formData.creditCardNumber && (
+                            <p className="text-red-500 text-xs mt-1 mb-2">
+                                Please enter a valid credit card number (16 digits for Visa/Mastercard, 15 for American Express)
+                            </p>
+                        )}
                         <input
                             type="text"
                             name="creditCardNumber"
                             value={formData.creditCardNumber}
-                            onChange={handleChange}
+                            onChange={(e) => {
+                                handleChange(e);
+                                const number = e.target.value;
+                                let type = '';
+                                if (number.startsWith('4')) {
+                                    type = 'Visa';
+                                } else if (number.startsWith('5')) {
+                                    type = 'Mastercard';
+                                } else if (number.startsWith('34') || number.startsWith('37')) {
+                                    type = 'American Express';
+                                }
+                                setFormData(prev => ({
+                                    ...prev,
+                                    creditCardType: type
+                                }));
+                            }}
                             className={`w-full p-2 border rounded-md focus:outline-none focus:ring-2 ${!formData.creditCardNumber.match(/^(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|3[47][0-9]{13})$/) && formData.creditCardNumber ? 'border-red-500 focus:ring-red-500' : 'focus:ring-lime-500'}`}
                             required
                             pattern="^(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|3[47][0-9]{13})$"
-                            title="Please enter a valid credit card number"
+                            title="Please enter a valid credit card number (16 digits for Visa/Mastercard, 15 for American Express)"
                         />
                     </div>
 
@@ -339,7 +380,12 @@ const SignupPage = () => {
                                             creditCardExpiry: year ? `${month}/${year}` : month
                                         }));
                                     }}
-                                    className={`w-full p-2 border rounded-md focus:outline-none focus:ring-2 ${!formData.creditCardExpiry && formData.creditCardExpiry !== '' ? 'border-red-500 focus:ring-red-500' : 'focus:ring-lime-500'}`}
+                                    className={`w-full p-2 border rounded-md focus:outline-none focus:ring-2 ${
+                                        (!formData.creditCardExpiry && formData.creditCardExpiry !== '') || 
+                                        (formData.creditCardExpiry && new Date() > new Date(formData.creditCardExpiry.split('/')[1], formData.creditCardExpiry.split('/')[0])) 
+                                        ? 'border-red-500 focus:ring-red-500' 
+                                        : 'focus:ring-lime-500'
+                                    }`}
                                     required
                                 >
                                     <option value="">Month</option>
@@ -365,12 +411,17 @@ const SignupPage = () => {
                                             creditCardExpiry: month ? `${month}/${year}` : year
                                         }));
                                     }}
-                                    className={`w-full p-2 border rounded-md focus:outline-none focus:ring-2 ${!formData.creditCardExpiry && formData.creditCardExpiry !== '' ? 'border-red-500 focus:ring-red-500' : 'focus:ring-lime-500'}`}
+                                    className={`w-full p-2 border rounded-md focus:outline-none focus:ring-2 ${
+                                        (!formData.creditCardExpiry && formData.creditCardExpiry !== '') || 
+                                        (formData.creditCardExpiry && new Date() > new Date(formData.creditCardExpiry.split('/')[1], formData.creditCardExpiry.split('/')[0])) 
+                                        ? 'border-red-500 focus:ring-red-500' 
+                                        : 'focus:ring-lime-500'
+                                    }`}
                                     required
                                 >
                                     <option value="">Year</option>
-                                    {Array.from({length: 10}, (_, i) => {
-                                        const year = (new Date().getFullYear() + i).toString().slice(-2);
+                                    {Array.from({length: 16}, (_, i) => {
+                                        const year = (2016 + i).toString();
                                         return (
                                             <option key={year} value={year}>
                                                 {year}
@@ -380,6 +431,9 @@ const SignupPage = () => {
                                 </select>
                             </div>
                         </div>
+                        {formData.creditCardExpiry && new Date() > new Date(formData.creditCardExpiry.split('/')[1], formData.creditCardExpiry.split('/')[0]) && (
+                            <p className="text-red-500 text-sm mt-1">This card has expired. Please enter a valid expiration date.</p>
+                        )}
                     </div>
 
                     <div className="md:col-span-2 mt-8">

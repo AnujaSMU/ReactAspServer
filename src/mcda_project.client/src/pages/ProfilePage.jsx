@@ -1,20 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import background from '../assets/Background.png';
 import ProfileRecipeCard from '../components/ProfileRecipeCard';
+import  Cookies  from 'universal-cookie';
+
+const cookies = new Cookies();
+const userID = cookies.get('userID');
 
 const ProfilePage = () => {
     // State to hold user data
     const [userData, setUserData] = useState({
         UserID: 1,
-        Username: 'chefmaster',
-        FirstName: 'John',
-        LastName: 'Doe',
-        City: 'Halifax',
-        ProvinceState: 'Nova Scotia',
-        Country: 'Canada',
-        PostalCode: 'B3J1A1',
-        PhoneNumber: '+19025551234',
-        EmailAddress: 'john.doe@example.com',
+        username: 'chefmaster',
+        firstName: 'John',
+        lastName: 'Doe',
+        city: 'Halifax',
+        provinceState: 'Nova Scotia',
+        country: 'Canada',
+        postalCode: 'B3J1A1',
+        phoneNumber: '+19025551234',
+        emailAddress: 'john.doe@example.com',
         recipes: [
             {
               "recipeID": 43,
@@ -41,7 +45,29 @@ const ProfilePage = () => {
         ]
 
     });
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                
+                
+                if (!userID) {
+                    navigate('/login');
+                    return;
+                }
 
+                const response = await fetch(`/api/Users/${userID}/details`);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch user data');
+                }
+                const data = await response.json();
+                setUserData(data);
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+            }
+        };
+
+        fetchUserData();
+    }, []);
     return (
         <div className="container mx-auto p-8">
             <div className="w-full h-48 mb-8 rounded-lg overflow-hidden">
@@ -51,7 +77,7 @@ const ProfilePage = () => {
                     className="w-full h-full object-cover"
                 />
             </div>
-            <h1 className="text-3xl font-bold mb-8">Welcome, {userData.Username}!</h1>
+            <h1 className="text-3xl font-bold mb-8">Welcome, {userData.username}!</h1>
             
             
             <div role="tablist" className="tabs tabs-lifted">
@@ -61,6 +87,7 @@ const ProfilePage = () => {
                     role="tab" 
                     className="tab" 
                     aria-label="My Recipes"
+                    defaultChecked
                 />
                 <div role="tabpanel" className="tab-content bg-base-100 border-base-300 rounded-box p-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -82,7 +109,7 @@ const ProfilePage = () => {
                     role="tab" 
                     className="tab" 
                     aria-label="Personal Information"
-                    defaultChecked
+                    
                 />
                 <div role="tabpanel" className="tab-content bg-base-100 border-base-300 rounded-box p-6">
                     <div className="grid grid-cols-2 gap-4">
@@ -90,7 +117,7 @@ const ProfilePage = () => {
                             <label className="block text-gray-700 text-sm font-bold mb-2">First Name</label>
                             <input 
                                 type="text"
-                                value={userData.FirstName}
+                                value={userData.firstName}
                                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700"
                             />
                         </div>
@@ -98,7 +125,7 @@ const ProfilePage = () => {
                             <label className="block text-gray-700 text-sm font-bold mb-2">Last Name</label>
                             <input 
                                 type="text"
-                                value={userData.LastName}
+                                value={userData.lastName}
                                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700"
                             />
                         </div>
@@ -106,7 +133,7 @@ const ProfilePage = () => {
                             <label className="block text-gray-700 text-sm font-bold mb-2">Email</label>
                             <input 
                                 type="email"
-                                value={userData.EmailAddress}
+                                value={userData.emailAddress}
                                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700"
                             />
                         </div>
@@ -114,7 +141,7 @@ const ProfilePage = () => {
                             <label className="block text-gray-700 text-sm font-bold mb-2">Phone Number</label>
                             <input 
                                 type="tel"
-                                value={userData.PhoneNumber}
+                                value={userData.phoneNumber}
                                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700"
                             />
                         </div>
@@ -126,7 +153,7 @@ const ProfilePage = () => {
                         <label className="block text-gray-700 text-sm font-bold mb-2">City</label>
                         <input 
                             type="text"
-                            value={userData.City}
+                            value={userData.city}
                             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700"
                         />
                     </div>
@@ -134,7 +161,7 @@ const ProfilePage = () => {
                         <label className="block text-gray-700 text-sm font-bold mb-2">Province/State</label>
                         <input 
                             type="text"
-                            value={userData.ProvinceState}
+                            value={userData.provinceState}
                             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700"
                         />
                     </div>
@@ -142,7 +169,7 @@ const ProfilePage = () => {
                         <label className="block text-gray-700 text-sm font-bold mb-2">Country</label>
                         <input 
                             type="text"
-                            value={userData.Country}
+                            value={userData.country}
                             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700"
                         />
                     </div>
@@ -150,7 +177,7 @@ const ProfilePage = () => {
                         <label className="block text-gray-700 text-sm font-bold mb-2">Postal Code</label>
                         <input 
                             type="text"
-                            value={userData.PostalCode}
+                            value={userData.postalCode}
                             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700"
                         />
                     </div>

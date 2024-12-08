@@ -25,7 +25,7 @@ const Sidebar = () => {
     <div className='p-3 md:p-10 border-r min-h-screen w-24 md:w-64'>
         <div className='flex flex-col gap-20 sticky top-10 left-0'>
             <div className='w-full'>
-                <img src="/vite.svg" alt="" className='hidden md:block'/>
+                <img src="/src/assets/IntoTheKitchenLogo.svg" alt="" className='hidden md:block'/>
             </div>
             <ul className='flex flex-col items-center md:items-start gap-8'>
                 <Link to={"/"} className='flex gap-1'>

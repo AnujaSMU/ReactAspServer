@@ -9,7 +9,18 @@ return (
                     onClick={(e) => {
                         e.preventDefault();
                         if(window.confirm('Are you sure you want to delete this recipe?')) {
-                            // Handle delete
+                            fetch(`/api/Recipe/delete/${recipe.recipeID}`, {
+                                method: 'DELETE'
+                            }).then(response => {
+                                if (response.ok) {
+                                    window.location.reload();
+                                } else {
+                                    alert('Failed to delete recipe');
+                                }
+                            }).catch(error => {
+                                console.error('Error:', error);
+                                alert('Error deleting recipe');
+                            });
                         }
                     }}
                     className="absolute top-2 right-2 bg-red-500 text-white p-2 rounded-full hover:bg-red-600 transition-colors opacity-0 group-hover:opacity-100 z-10"

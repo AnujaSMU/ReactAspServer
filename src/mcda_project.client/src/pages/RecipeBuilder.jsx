@@ -27,7 +27,8 @@ function RecipeBuilder() {
         const data = await response.json();
         const formattedIngredients = data.map(ingredient => ({
           value: ingredient.ingredientID,
-          label: ingredient.name
+          label: ingredient.name,
+          costPerUnit: ingredient.costPerUnit
         }));
         setAvailableIngredients(formattedIngredients);
       } catch (error) {
@@ -73,27 +74,37 @@ function RecipeBuilder() {
     const formattedSteps = recipe.steps
     .map((step, index) => `${index + 1}. ${step.charAt(0).toUpperCase() + step.slice(1)}.`)
     .join(" ");
-    console.log(recipe);
-    console.log(formattedSteps);
-    // try {
-    //   const response = await fetch('/api/Recipe', {
-    //     method: 'POST',
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //     },
-    //     body: JSON.stringify(recipe)
-    //   });
+    const recipeData = {
+        "Title": recipe.title,
+        "Description": recipe.description,
+        "Steps": formattedSteps,
+        "AuthorID": userID,
+        "Ingredients": recipe.ingredients.map(ing => ({
+            "IngredientID": ing.value,
+            "Quantity": ing.quantity
+        })),
+        "Images": []
+    }
+    console.log(recipeData);
+    try {
+      const response = await fetch('/api/Recipe/create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(recipeData)
+      });
 
-    //   if (response.ok) {
-    //     const data = await response.json();
-    //     navigate(`/recipe/${data.recipeID}`);
-    //   } else {
-    //     throw new Error('Failed to create recipe');
-    //   }
-    // } catch (error) {
-    //   console.error('Error creating recipe:', error);
-    //   alert('Failed to create recipe. Please try again.');
-    // }
+      if (response.ok) {
+        const data = await response.json();
+        navigate(`/recipe/${data.recipeID}`);
+      } else {
+        throw new Error('Failed to create recipe');
+      }
+    } catch (error) {
+      console.error('Error creating recipe:', error);
+      alert('Failed to create recipe. Please try again.');
+    }
   };
 
   const calculateTotalPrice = () => {
@@ -228,7 +239,8 @@ function RecipeBuilder() {
             </div>
             <button
               onClick={handleSubmit}
-              className="w-full bg-lime-500 text-white py-3 rounded-md hover:bg-lime-600 transition-colors font-semibold flex items-center justify-center gap-2"
+              disabled={!recipe.title || !recipe.description || recipe.ingredients.length === 0 || !recipe.steps?.length || recipe.steps.some(step => !step.trim())}
+              className={`w-full py-3 rounded-md transition-colors font-semibold flex items-center justify-center gap-2 ${!recipe.title || !recipe.description || recipe.ingredients.length === 0 || !recipe.steps?.length || recipe.steps.some(step => !step.trim()) ? 'bg-gray-400 cursor-not-allowed' : 'bg-lime-500 hover:bg-lime-600 text-white'}`}
             >
               <Save size={20} />
               Save Recipe
