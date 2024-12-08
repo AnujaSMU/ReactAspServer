@@ -18,6 +18,18 @@ const SignupPage = () => {
         creditCardExpiry: ''
     });
     const [focus, setFocus] = useState(false);
+
+    const patterns = {
+        username: /^[a-zA-Z0-9]{3,20}$/,
+        password: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+        name: /^[A-Za-z\s]+$/,
+        usZipCode: /^[0-9]{5}(?:-[0-9]{4})?$/,
+        canadianPostalCode: /^[A-Za-z][0-9][A-Za-z]\s?[0-9][A-Za-z][0-9]$/,
+        phoneNumber: /^\+?1?[2-9][0-9]{2}[2-9][0-9]{6}$/,
+        email: /^[\w.-]+@[\w.-]+\.[a-zA-Z]{2,}$/,
+        creditCard: /^(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|3[47][0-9]{13})$/
+    };
+
     const usStates = [
         'AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN',
         'IA', 'KS', 'KY', 'LA', 'ME', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV',
@@ -75,10 +87,10 @@ const SignupPage = () => {
                     </div>
 
                     <div>
-                        <label className={`block text-sm font-medium mb-1 ${!formData.username.match(/^[a-zA-Z0-9]{3,20}$/) && formData.username ? 'text-red-500' : 'text-gray-700'}`}>
+                        <label className={`block text-sm font-medium mb-1 ${!formData.username.match(patterns.username) && formData.username ? 'text-red-500' : 'text-gray-700'}`}>
                             Username
                         </label>
-                        {!formData.username.match(/^[a-zA-Z0-9]{3,20}$/) && formData.username && (
+                        {!formData.username.match(patterns.username) && formData.username && (
                             <p className="text-red-500 text-xs mt-1 mb-2">
                                 Username must be between 3-20 characters and can only contain letters and numbers
                             </p>
@@ -88,17 +100,17 @@ const SignupPage = () => {
                             name="username"
                             value={formData.username}
                             onChange={handleChange}
-                            className={`w-full p-2 border rounded-md focus:outline-none focus:ring-2 ${!formData.username.match(/^[a-zA-Z0-9]{3,20}$/) && formData.username ? 'border-red-500 focus:ring-red-500' : 'focus:ring-lime-500'}`}
+                            className={`w-full p-2 border rounded-md focus:outline-none focus:ring-2 ${!formData.username.match(patterns.username) && formData.username ? 'border-red-500 focus:ring-red-500' : 'focus:ring-lime-500'}`}
                             required
                             minLength={3}
                             maxLength={20}
-                            pattern="[a-zA-Z0-9]+"
+                            pattern={patterns.username.source}
                             title="Username must be between 3-20 characters and can only contain letters and numbers"
                         />
                     </div>
 
                     <div className="relative">
-                        <label className={`block text-sm font-medium mb-1 ${!formData.password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/) && formData.password ? 'text-red-500' : 'text-gray-700'}`}>
+                        <label className={`block text-sm font-medium mb-1 ${!formData.password.match(patterns.password) && formData.password ? 'text-red-500' : 'text-gray-700'}`}>
                             Password
                         </label>
                         <input
@@ -106,10 +118,10 @@ const SignupPage = () => {
                             name="password"
                             value={formData.password}
                             onChange={handleChange}
-                            className={`w-full p-2 border rounded-md focus:outline-none focus:ring-2 ${!formData.password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/) && formData.password ? 'border-red-500 focus:ring-red-500' : 'focus:ring-lime-500'}`}
+                            className={`w-full p-2 border rounded-md focus:outline-none focus:ring-2 ${!formData.password.match(patterns.password) && formData.password ? 'border-red-500 focus:ring-red-500' : 'focus:ring-lime-500'}`}
                             required
                             minLength={8}
-                            pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
+                            pattern={patterns.password.source}
                             title="Password must be at least 8 characters and include uppercase, lowercase, number and special character"
                             onFocus={() => { setFocus(true) }}
                             onBlur={() => { setFocus(false) }}
@@ -144,10 +156,10 @@ const SignupPage = () => {
                     </div>
 
                     <div>
-                        <label className={`block text-sm font-medium mb-1 ${!formData.firstName.match(/^[A-Za-z\s]+$/) && formData.firstName ? 'text-red-500' : 'text-gray-700'}`}>
+                        <label className={`block text-sm font-medium mb-1 ${!formData.firstName.match(patterns.name) && formData.firstName ? 'text-red-500' : 'text-gray-700'}`}>
                             First Name
                         </label>
-                        {!formData.firstName.match(/^[A-Za-z\s]+$/) && formData.firstName && (
+                        {!formData.firstName.match(patterns.name) && formData.firstName && (
                             <p className="text-sm text-red-500 mt-1">Please enter a valid first name (letters only)</p>
                         )}
                         <input
@@ -155,17 +167,17 @@ const SignupPage = () => {
                             name="firstName"
                             value={formData.firstName}
                             onChange={handleChange}
-                            className={`w-full p-2 border rounded-md focus:outline-none focus:ring-2 ${!formData.firstName.match(/^[A-Za-z\s]+$/) && formData.firstName ? 'border-red-500 focus:ring-red-500' : 'focus:ring-lime-500'}`}
+                            className={`w-full p-2 border rounded-md focus:outline-none focus:ring-2 ${!formData.firstName.match(patterns.name) && formData.firstName ? 'border-red-500 focus:ring-red-500' : 'focus:ring-lime-500'}`}
                             required
-                            pattern="[A-Za-z\s]+"
+                            pattern={patterns.name.source}
                         />
                     </div>
 
                     <div>
-                        <label className={`block text-sm font-medium mb-1 ${!formData.lastName.match(/^[A-Za-z\s]+$/) && formData.lastName ? 'text-red-500' : 'text-gray-700'}`}>
+                        <label className={`block text-sm font-medium mb-1 ${!formData.lastName.match(patterns.name) && formData.lastName ? 'text-red-500' : 'text-gray-700'}`}>
                             Last Name
                         </label>
-                        {!formData.lastName.match(/^[A-Za-z\s]+$/) && formData.lastName && (
+                        {!formData.lastName.match(patterns.name) && formData.lastName && (
                             <p className="text-sm text-red-500 mt-1">Please enter a valid last name (letters only)</p>
                         )}
                         <input
@@ -173,18 +185,18 @@ const SignupPage = () => {
                             name="lastName"
                             value={formData.lastName}
                             onChange={handleChange}
-                            className={`w-full p-2 border rounded-md focus:outline-none focus:ring-2 ${!formData.lastName.match(/^[A-Za-z\s]+$/) && formData.lastName ? 'border-red-500 focus:ring-red-500' : 'focus:ring-lime-500'}`}
+                            className={`w-full p-2 border rounded-md focus:outline-none focus:ring-2 ${!formData.lastName.match(patterns.name) && formData.lastName ? 'border-red-500 focus:ring-red-500' : 'focus:ring-lime-500'}`}
                             required
-                            pattern="[A-Za-z\s]+"
+                            pattern={patterns.name.source}
                             title="Please enter a valid last name (letters only)"
                         />
                     </div>
 
                     <div>
-                        <label className={`block text-sm font-medium mb-1 ${!formData.city.match(/^[A-Za-z\s]+$/) && formData.city ? 'text-red-500' : 'text-gray-700'}`}>
+                        <label className={`block text-sm font-medium mb-1 ${!formData.city.match(patterns.name) && formData.city ? 'text-red-500' : 'text-gray-700'}`}>
                             City
                         </label>
-                        {!formData.city.match(/^[A-Za-z\s]+$/) && formData.city && (
+                        {!formData.city.match(patterns.name) && formData.city && (
                             <p className="text-sm text-red-500 mt-1">Please enter a valid city name (letters only)</p>
                         )}
                         <input
@@ -192,9 +204,9 @@ const SignupPage = () => {
                             name="city"
                             value={formData.city}
                             onChange={handleChange}
-                            className={`w-full p-2 border rounded-md focus:outline-none focus:ring-2 ${!formData.city.match(/^[A-Za-z\s]+$/) && formData.city ? 'border-red-500 focus:ring-red-500' : 'focus:ring-lime-500'}`}
+                            className={`w-full p-2 border rounded-md focus:outline-none focus:ring-2 ${!formData.city.match(patterns.name) && formData.city ? 'border-red-500 focus:ring-red-500' : 'focus:ring-lime-500'}`}
                             required
-                            pattern="[A-Za-z\s]+"
+                            pattern={patterns.name.source}
                             title="Please enter a valid city name (letters only)"
                         />
                     </div>
@@ -245,10 +257,10 @@ const SignupPage = () => {
                     </div>
 
                     <div>
-                        <label className={`block text-sm font-medium mb-1 ${!formData.postalCode.match(formData.country === "USA" ? /^[0-9]{5}(?:-[0-9]{4})?$/ : /^[A-Za-z][0-9][A-Za-z]\s?[0-9][A-Za-z][0-9]$/) && formData.postalCode ? 'text-red-500' : 'text-gray-700'}`}>
+                        <label className={`block text-sm font-medium mb-1 ${!formData.postalCode.match(formData.country === "USA" ? patterns.usZipCode : patterns.canadianPostalCode) && formData.postalCode ? 'text-red-500' : 'text-gray-700'}`}>
                             Postal Code
                         </label>
-                        {!formData.postalCode.match(formData.country === "USA" ? /^[0-9]{5}(?:-[0-9]{4})?$/ : /^[A-Za-z][0-9][A-Za-z]\s?[0-9][A-Za-z][0-9]$/) && formData.postalCode && (
+                        {!formData.postalCode.match(formData.country === "USA" ? patterns.usZipCode : patterns.canadianPostalCode) && formData.postalCode && (
                             <p className="text-sm text-red-500 mt-1">Please enter a valid postal code</p>
                         )}
                         <input
@@ -256,18 +268,18 @@ const SignupPage = () => {
                             name="postalCode"
                             value={formData.postalCode}
                             onChange={handleChange}
-                            className={`w-full p-2 border rounded-md focus:outline-none focus:ring-2 ${!formData.postalCode.match(formData.country === "USA" ? /^[0-9]{5}(?:-[0-9]{4})?$/ : /^[A-Za-z][0-9][A-Za-z]\s?[0-9][A-Za-z][0-9]$/) && formData.postalCode ? 'border-red-500 focus:ring-red-500' : 'focus:ring-lime-500'}`}
+                            className={`w-full p-2 border rounded-md focus:outline-none focus:ring-2 ${!formData.postalCode.match(formData.country === "USA" ? patterns.usZipCode : patterns.canadianPostalCode) && formData.postalCode ? 'border-red-500 focus:ring-red-500' : 'focus:ring-lime-500'}`}
                             required
-                            pattern={formData.country === "USA" ? "^[0-9]{5}(?:-[0-9]{4})?$" : "^[A-Za-z][0-9][A-Za-z]\\s?[0-9][A-Za-z][0-9]$"}
+                            pattern={formData.country === "USA" ? patterns.usZipCode.source : patterns.canadianPostalCode.source}
                             title={formData.country === "USA" ? "Please enter a valid US ZIP code (e.g. 12345 or 12345-6789)" : "Please enter a valid Canadian postal code (e.g. A1A 1A1)"}
                         />
                     </div>
 
                     <div>
-                        <label className={`block text-sm font-medium mb-1 ${!formData.phoneNumber.match(/^\+?1?[2-9][0-9]{2}[2-9][0-9]{6}$/) && formData.phoneNumber ? 'text-red-500' : 'text-gray-700'}`}>
+                        <label className={`block text-sm font-medium mb-1 ${!formData.phoneNumber.match(patterns.phoneNumber) && formData.phoneNumber ? 'text-red-500' : 'text-gray-700'}`}>
                             Phone Number
                         </label>
-                        {!formData.phoneNumber.match(/^\+?1?[2-9][0-9]{2}[2-9][0-9]{6}$/) && formData.phoneNumber && (
+                        {!formData.phoneNumber.match(patterns.phoneNumber) && formData.phoneNumber && (
                             <p className="text-red-500 text-xs mt-1 mb-2">
                                 Please enter a valid US/Canadian phone number (e.g. +12125551234)
                             </p>
@@ -277,18 +289,18 @@ const SignupPage = () => {
                             name="phoneNumber"
                             value={formData.phoneNumber}
                             onChange={handleChange}
-                            className={`w-full p-2 border rounded-md focus:outline-none focus:ring-2 ${!formData.phoneNumber.match(/^\+?1?[2-9][0-9]{2}[2-9][0-9]{6}$/) && formData.phoneNumber ? 'border-red-500 focus:ring-red-500' : 'focus:ring-lime-500'}`}
+                            className={`w-full p-2 border rounded-md focus:outline-none focus:ring-2 ${!formData.phoneNumber.match(patterns.phoneNumber) && formData.phoneNumber ? 'border-red-500 focus:ring-red-500' : 'focus:ring-lime-500'}`}
                             required
-                            pattern="^\+?1?[2-9][0-9]{2}[2-9][0-9]{6}$"
+                            pattern={patterns.phoneNumber.source}
                             title="Please enter a valid US/Canadian phone number (e.g. 2125551234)"
                         />
                     </div>
 
                     <div>
-                        <label className={`block text-sm font-medium mb-1 ${!formData.emailAddress.match(/^[\w.-]+@[\w.-]+\.[a-zA-Z]{2,}$/) && formData.emailAddress ? 'text-red-500' : 'text-gray-700'}`}>
+                        <label className={`block text-sm font-medium mb-1 ${!formData.emailAddress.match(patterns.email) && formData.emailAddress ? 'text-red-500' : 'text-gray-700'}`}>
                             Email Address
                         </label>
-                        {!formData.emailAddress.match(/^[\w.-]+@[\w.-]+\.[a-zA-Z]{2,}$/) && formData.emailAddress && (
+                        {!formData.emailAddress.match(patterns.email) && formData.emailAddress && (
                             <p className="text-red-500 text-xs mt-1 mb-2">
                                 Please enter a valid email address
                             </p>
@@ -298,9 +310,9 @@ const SignupPage = () => {
                             name="emailAddress"
                             value={formData.emailAddress}
                             onChange={handleChange}
-                            className={`w-full p-2 border rounded-md focus:outline-none focus:ring-2 ${!formData.emailAddress.match(/^[\w.-]+@[\w.-]+\.[a-zA-Z]{2,}$/) && formData.emailAddress ? 'border-red-500 focus:ring-red-500' : 'focus:ring-lime-500'}`}
+                            className={`w-full p-2 border rounded-md focus:outline-none focus:ring-2 ${!formData.emailAddress.match(patterns.email) && formData.emailAddress ? 'border-red-500 focus:ring-red-500' : 'focus:ring-lime-500'}`}
                             required
-                            pattern="^[\w.-]+@[\w.-]+\.[a-zA-Z]{2,}$"
+                            pattern={patterns.email.source}
                             title="Please enter a valid email address"
                         />
                     </div>
@@ -314,7 +326,7 @@ const SignupPage = () => {
                         <label className={`block text-sm font-medium mb-1 ${!formData.creditCardNumber ? 'text-red-500' : 'text-gray-700'}`}>
                             Credit Card Number
                         </label>
-                        {!formData.creditCardNumber.match(/^(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|3[47][0-9]{13})$/) && formData.creditCardNumber && (
+                        {!formData.creditCardNumber.match(patterns.creditCard) && formData.creditCardNumber && (
                             <p className="text-red-500 text-xs mt-1 mb-2">
                                 Please enter a valid credit card number (16 digits for Visa/Mastercard, 15 for American Express)
                             </p>
@@ -339,9 +351,9 @@ const SignupPage = () => {
                                     creditCardType: type
                                 }));
                             }}
-                            className={`w-full p-2 border rounded-md focus:outline-none focus:ring-2 ${!formData.creditCardNumber.match(/^(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|3[47][0-9]{13})$/) && formData.creditCardNumber ? 'border-red-500 focus:ring-red-500' : 'focus:ring-lime-500'}`}
+                            className={`w-full p-2 border rounded-md focus:outline-none focus:ring-2 ${!formData.creditCardNumber.match(patterns.creditCard) && formData.creditCardNumber ? 'border-red-500 focus:ring-red-500' : 'focus:ring-lime-500'}`}
                             required
-                            pattern="^(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|3[47][0-9]{13})$"
+                            pattern={patterns.creditCard.source}
                             title="Please enter a valid credit card number (16 digits for Visa/Mastercard, 15 for American Express)"
                         />
                     </div>

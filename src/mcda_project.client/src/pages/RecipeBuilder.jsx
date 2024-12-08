@@ -85,7 +85,7 @@ function RecipeBuilder() {
         })),
         "Images": []
     }
-    console.log(recipeData);
+    // console.log(recipeData);
     try {
       const response = await fetch('/api/Recipe/create', {
         method: 'POST',

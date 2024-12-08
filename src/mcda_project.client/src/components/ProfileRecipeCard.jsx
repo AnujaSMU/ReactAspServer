@@ -27,7 +27,7 @@ return (
                 >
                     <Trash2 size={24} />
                 </button>
-                <a href={`/recipe/${recipe.recipeID}`}>
+                <a href={`/recipe/${recipe.recipeID}`}> /*Backend Image URLs are placeholder*/
                     {/* <img src={recipe.Images[0].ImageUrl} alt="" className='w-full h-full object-cover cursor-pointer rounded-lg'/> */}
                     <img src="https://static.wikia.nocookie.net/da7f4324-f6f9-4ae7-91f9-9680eac4cb64/scale-to-width/755"alt="" className='w-full h-full object-cover cursor-pointer rounded-lg'/>
                 </a>

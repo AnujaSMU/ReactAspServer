@@ -8,7 +8,7 @@ import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
 import RecipeBuilder from './pages/RecipeBuilder';
 // import Cookies from 'universal-cookie';
-// import jwt from 'jwt-decode';
+// import jwt from 'jwt-decode'; // uses universal-cookie to decode the token
 
 function App(){
 
