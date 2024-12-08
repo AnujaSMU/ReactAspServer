@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import './ProfilePage.css';
-import Login from './LoginPage.jsx';
-import SignUp from './Signup.jsx';
 
 const ProfilePage = () => {
     // State to hold user data
@@ -181,21 +179,7 @@ const ProfilePage = () => {
         const [month, year] = expiryDate.split('/');
         return `${year}-${month}`;
     };
-
-    // Handle login
-    const handleLogin = (user) => {
-        setUserData(user);
-        setIsLoggedIn(true);
-        setShowLogin(false);
-    };
-
-    // Handle sign up
-    const handleSignUp = (newUser) => {
-        // Simulated sign-up process
-        setUserData(newUser);
-        setIsLoggedIn(true);
-        setShowSignUp(false);
-    };
+    
 
     // Automatically update username when first name or last name changes
     useEffect(() => {
@@ -204,37 +188,12 @@ const ProfilePage = () => {
             Username: `${userData.FirstName.toLowerCase()}_${userData.LastName.toLowerCase()}`,
         });
     }, [userData.FirstName, userData.LastName]);
-    const onSignUp = (newUser) => {
-        // Simulated sign-up process
-        setUserData(newUser);
-        setIsLoggedIn(true);
-        setShowSignUp(false);
-    };
-
-    if (!isLoggedIn) {
-        return (
-            <div>
-                {showLogin ? (
-                    <Login onLogin={handleLogin} />
-                ) : showSignUp ? (
-                    <SignUp onSignUp={onSignUp} />
-                ) : (
-                    <div>
-                        <p>You didn't login, Please Login</p>
-                        <button onClick={() => setShowLogin(true)}>Login</button>
-                        <button onClick={() => setShowSignUp(true)}>Sign Up</button>
-                    </div>
-                )}
-            </div>
-        );
-    }
-
 
     return (
         <div className="profile-page">
-            <div className="profile-content">
+            <div className="profile-container">
                 {/* Basic Information Section */}
-                <div className="profile-section basic-info">
+                
                     <h1>Profile</h1>
                     <h2>Basic Information</h2>
                     <button
@@ -373,9 +332,9 @@ const ProfilePage = () => {
                             {errors.EmailAddress && <div className="error-message">{errors.EmailAddress}</div>}
                         </div>
                     </div>
-                </div>
+               
                 {/* Bank Information Section */}
-                <div className="profile-section bank-info">
+                
                     <h2>Bank Information</h2>
                     <button
                         className="edit-button"
@@ -440,7 +399,7 @@ const ProfilePage = () => {
                             {errors.CreditCardExpiry && <div className="error-message">{errors.CreditCardExpiry}</div>}
                         </div>
                     </div>
-                </div>
+            
             </div>
         </div>
     );

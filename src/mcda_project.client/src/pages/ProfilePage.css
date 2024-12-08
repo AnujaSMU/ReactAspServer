@@ -1,11 +1,34 @@
 /* Styles for the profile page */
+body {
+    display: flex;
+    align-items: center; /* 垂直方向居中 */
+    min-height: 100vh; /* 页面高度 */
+}
 .profile-page {
     display: flex;
 }
+h1 {
+    font-size: 30px; 
+    text-align: center; /* 居中 */
+    font-weight: bold; /* 加粗 */
+    color: rgb(32, 41, 55);
+}
+h2 {
+    font-size: 18px;
+    text-align: left; /* 居中 */
+    font-weight: bold; /* 加粗 */
+    color: rgb(32, 41, 55);
+}
 
-.profile-content {
-    flex: 1;
-    padding: 20px;
+.profile-container {
+    width: 700px;
+    height: auto; /* 根据需要调整高度 */
+    align-items: center;
+    background-color: #f0f0f0; /* 浅灰色 */
+    margin: 0; /* 外边距清零，由父容器控制 */
+    padding: 50px; /* 给容器加点内边距 */
+    border-radius: 8px; /* 圆角效果 */
+
 }
 
 .profile-section {
