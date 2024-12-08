@@ -36,8 +36,10 @@ namespace MCDA_Project.Server.Controllers
                 return BadRequest("Username already exists.");
             }
 
+            // Hash password before saving
             user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
 
+            // Ensure optional fields have default values if null
             user.City ??= string.Empty;
             user.ProvinceState ??= string.Empty;
             user.Country ??= string.Empty;
@@ -94,8 +96,8 @@ namespace MCDA_Project.Server.Controllers
         {
             var claims = new[]
             {
-        new Claim(ClaimTypes.Name, user.Username),
-        new Claim(ClaimTypes.NameIdentifier, user.UserID.ToString())
+                new Claim(ClaimTypes.Name, user.Username),
+                new Claim(ClaimTypes.NameIdentifier, user.UserID.ToString())
             };
 
             // Use the key directly from the configuration
@@ -112,7 +114,7 @@ namespace MCDA_Project.Server.Controllers
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-
+        // GET: api/Users/order/{id}
         [HttpGet("order/{id}")]
         public async Task<ActionResult> GetUserDetails(int id)
         {
@@ -123,8 +125,7 @@ namespace MCDA_Project.Server.Controllers
                 {
                     u.FirstName,
                     u.LastName,
-                    CreditCardNumber = MaskCreditCardNumber(u.CreditCardNumber)
-
+                    CreditCardNumber = MaskCreditCardNumber(u.CreditCardNumber) // Mask the credit card number
                 })
                 .FirstOrDefaultAsync();
 
@@ -149,13 +150,9 @@ namespace MCDA_Project.Server.Controllers
             // Mask all but the last 4 digits
             return string.Join(" ", new string[]
             {
-        "****", "****", "****", creditCardNumber.Substring(creditCardNumber.Length - 4)
+                "****", "****", "****", creditCardNumber.Substring(creditCardNumber.Length - 4)
             });
         }
-
-
-
-
     }
 
     // DTO for login request
